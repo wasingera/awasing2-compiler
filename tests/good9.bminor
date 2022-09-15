@@ -1,0 +1,12 @@
+s: string = "i really want to learn bminor\nit's the best"
+
+main: function integer ( argc: integer, argv: array [] string ) = {
+    puts("hello world");
+
+    i: integer;
+    for (i = 0; i < array_length; i++) {
+        j: integer;
+        for (j = 0; j < array_2_length; j++)
+            main();
+    }
+}

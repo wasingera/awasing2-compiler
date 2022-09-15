@@ -1,0 +1,3 @@
+'single quote strings don't exist'
+"but normal ones do"
+string: function() { return 'bad'; }

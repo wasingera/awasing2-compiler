@@ -1,0 +1,9 @@
+puts: function void ( s: string );
+
+main: function integer () = {
+	puts("hello world");
+	i = 4;
+	if (e == 5) {
+		print "i love bminor"
+	}
+}
