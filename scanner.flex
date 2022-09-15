@@ -62,7 +62,7 @@ while        { return WHILE; }
 
 ({ALPHA}|_)+({ALPHANUM}|_)* { return IDENTIFIER; }
 
-'([^\"\\\n]|\\(.|\n))' { return CHAR_LITERAL; }
+'([^\'\\\n]|\\(.|\n))' { return CHAR_LITERAL; }
 [+-]?{DIGIT}+ { return INTEGER_LITERAL; }
 
 \+ { return PLUS; }
