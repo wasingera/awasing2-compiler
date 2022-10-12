@@ -1,0 +1,9 @@
+x: integer = (y ^ 5 + 4) ^ (6 + 3 / 2 *5);
+
+f: function integer () = {
+if (x >= 5) {
+    for (;x > 10; x++)
+        if (true)
+            print x, y;
+}
+}

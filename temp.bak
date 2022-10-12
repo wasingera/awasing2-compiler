@@ -1,1 +1,0 @@
-'\\?{ALPHANUM}' { return CHAR_LITERAL; }

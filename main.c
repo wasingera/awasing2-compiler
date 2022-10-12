@@ -8,7 +8,10 @@ extern int yylex();
 extern char *yytext;
 extern int yyleng;
 
+typedef enum yytokentype token_t;
+
 int scan(char* fName);
+int parse(char* fName);
 void print_token(token_t t);
 char* parse_escape_codes();
 
@@ -17,10 +20,34 @@ int main(int argc, char** argv) {
     for (int i = 1; i < argc && argv[i][0] == '-'; i++) {
         if (!strcmp(argv[i], "-scan")) {
             return scan(argv[i+1]); 
+        } else if (!strcmp(argv[i], "-parse")) {
+            return parse(argv[i+1]);
         }
+
     }
 
     return 0;
+}
+
+int parse(char* fName) {
+    if (!fName) {
+        printf("Need a file to parse!\n");
+        return 1;
+    }
+
+	yyin = fopen(fName,"r");
+	if (!yyin) {
+		printf("could not open %s!\n", fName);
+		return 1;
+	}
+
+    if (yyparse() == 0) {
+        printf("Parse successful\n");
+        return 0;
+    } 
+
+    printf("Parse failed: %s\n", yytext);
+    return 1;
 }
 
 int scan(char* fName) {
