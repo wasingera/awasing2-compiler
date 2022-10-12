@@ -1,0 +1,7 @@
+f: function void () = {
+    for (;;) {
+        if x > 5 {
+            print "asdf";
+        }
+    }
+}

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 bminor=./bminor
-path=./tests/parser_tests/sample
+path=./tests/parser_tests
 
 for testfile in $path/good*.bminor
 do

@@ -1,0 +1,5 @@
+b: integer = 5;
+
+f: integer char () = {
+    return x;
+}

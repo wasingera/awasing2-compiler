@@ -1,0 +1,7 @@
+bomba: function char () = {
+    x++;
+    big_bombas = 2;
+    print "big bomba = ", 2;
+
+    goomba = stomp();
+}

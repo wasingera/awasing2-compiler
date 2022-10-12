@@ -84,6 +84,7 @@ type_func: INTEGER
          | CHAR
          | STRING
          | VOID
+         | FUNCTION
          ;
 
 param_list_e: param_list
@@ -99,6 +100,7 @@ type_param: INTEGER
           | CHAR
           | STRING
           | AUTO
+          | FUNCTION
           | ARRAY OPEN_SQUARE expr_10 CLOSE_SQUARE type_param
           | ARRAY OPEN_SQUARE  CLOSE_SQUARE type_param
           ;
@@ -114,34 +116,37 @@ type_var: INTEGER
 stmt: if_stmt
     ;
 
-other_stmt: RETURN expr_10 SEMICOLON
-    | RETURN SEMICOLON
+other_stmt: RETURN expr_or_e SEMICOLON
     | PRINT expr_list_e SEMICOLON
-    | OPEN_CURLY stmt_list CLOSE_CURLY
+    | OPEN_CURLY stmt_list_e CLOSE_CURLY
     | expr_10 SEMICOLON
-    | FOR OPEN_PAREN expr_or_e SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN stmt
     | decl_var
     ;
 
-/* condition: OPEN_PAREN expr_10 CLOSE_PAREN */
-/*          ; */
-
+condition: OPEN_PAREN expr_10 CLOSE_PAREN
+         ;
 
 if_stmt: matched_if_stmt
        | open_if_stmt
        ;
 
-matched_if_stmt: IF OPEN_PAREN expr_10 CLOSE_PAREN matched_if_stmt ELSE matched_if_stmt
+matched_if_stmt: IF condition matched_if_stmt ELSE matched_if_stmt
+               | FOR OPEN_PAREN expr_or_e SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN matched_if_stmt
                | other_stmt
                ;
 
-open_if_stmt: IF OPEN_PAREN expr_10 CLOSE_PAREN if_stmt
-            | IF OPEN_PAREN expr_10 CLOSE_PAREN matched_if_stmt ELSE open_if_stmt
+open_if_stmt: IF condition if_stmt
+            | IF condition matched_if_stmt ELSE open_if_stmt
+            | FOR OPEN_PAREN expr_or_e SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN open_if_stmt
             ;
 
 expr_or_e: expr_10
          | /* e */
          ;
+
+stmt_list_e: stmt_list
+           | /* e */
+           ;
 
 stmt_list: stmt stmt_list
          | stmt

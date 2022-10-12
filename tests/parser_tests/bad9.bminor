@@ -1,0 +1,2 @@
+5: integer = 6 + 5; // not allowed :|
+

@@ -1,0 +1,5 @@
+f: function void () = {
+    g: function void() = {
+        big++;
+    }
+}

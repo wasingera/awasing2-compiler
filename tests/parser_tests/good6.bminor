@@ -1,0 +1,6 @@
+big_NUMBA: auto = -5++ ^ 10000 + 1;
+
+f: function void () = {
+    print "i am from the void", "and thus i shall return ";
+    return;
+}

@@ -1,0 +1,8 @@
+x: array[5] integer = {1, 2, 3, 4, "asdf"};
+
+f: function void (s: string, i: integer) = {
+    c: integer = 0;
+    for (c = 0; c < i; c++) {
+        print s[i];
+    }
+}

@@ -1,0 +1,5 @@
+f: function char () = {
+    for (x; x = true, x++) {
+        print x;
+    }
+}

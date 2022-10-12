@@ -1,0 +1,6 @@
+asdf: integer = f1(2, 3);
+
+bunch_o_stmts: function char () = {
+    5 + 6;
+    return f2(6 == 4, 5++);
+}

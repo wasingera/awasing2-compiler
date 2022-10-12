@@ -1,0 +1,8 @@
+// this is a comment, he gets scanned out :(
+
+/* even his friend
+ * the multiline comment
+ * shall perish
+ */
+
+ f: function string (c: char, r: integer /* goodbye world! ahhhhhh */);

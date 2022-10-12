@@ -1,11 +1,16 @@
-f: function char (x: array [] array []);
+f: function char (x: array [] array [] string);
 
 x: integer = 5;
 
 x: array[10] array[10] integer;
 
-f2: function string (x: string, y: array [], l: integer) = {
+f2: function string (x: string, y: array [] string, l: integer) = {
     x: integer = 0;
-    for (x; x < 5; x++)
-        if (true) print x;
+    for (x; x < 5; x++) {
+        if (true)  {
+            if (true)
+                print x;
+        }
+        else {print y; }
+    }
 }

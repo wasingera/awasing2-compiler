@@ -1,0 +1,12 @@
+bingo_bango_bongo : function void () = {
+    i: integer = 0;
+
+    for (;;) {
+        if (i % 5 == 0 && i % 3 == 0)
+            print "bingo";
+        if (i % 5 == 0) {
+            print "bango";
+        } else
+            print "bongo";
+    }
+}

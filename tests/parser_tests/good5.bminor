@@ -1,0 +1,12 @@
+i: integer = f(5) + asdf ^ 534;
+
+big_boom: function void () = {
+    for (;;)
+        fork(); /* tee hee */
+}
+
+bigger_boom: function void() = {
+
+    for (;;)
+        fork_times_two();
+}
