@@ -2,11 +2,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "expr.h"
 
 extern FILE *yyin;
 extern int yylex();
 extern char *yytext;
 extern int yyleng;
+
+extern struct expr* root;
 
 typedef enum yytokentype token_t;
 
@@ -14,6 +17,7 @@ int scan(char* fName);
 int parse(char* fName);
 void print_token(token_t t);
 char* parse_escape_codes();
+int print(char* fName);
 
 int main(int argc, char** argv) {
 
@@ -22,9 +26,20 @@ int main(int argc, char** argv) {
             return scan(argv[i+1]); 
         } else if (!strcmp(argv[i], "-parse")) {
             return parse(argv[i+1]);
+        } else if (!strcmp(argv[i], "-print")) {
+            return print(argv[i+1]);
         }
 
     }
+
+    return 0;
+}
+
+int print(char* fName) {
+    if (parse(fName) != 0)
+        return 1;
+
+    expr_print(root, NULL);
 
     return 0;
 }

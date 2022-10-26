@@ -1,4 +1,4 @@
-bminor: main.o scanner.o parser.o
+bminor: main.o scanner.o parser.o expr.o
 	gcc -o $@ $^
 
 test-parser: bminor
@@ -6,6 +6,9 @@ test-parser: bminor
 
 main.o: main.c tokens.h
 	gcc -c -o $@ main.c
+
+expr.o: expr.c expr.h
+	gcc -c -o $@ expr.c
 
 scanner.o: scanner.c tokens.h
 	gcc -c -o $@ scanner.c
