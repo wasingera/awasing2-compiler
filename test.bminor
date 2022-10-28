@@ -1,1 +1,19 @@
-(5 + a[('b' ? true : false)] ^ ("s" + true))
+x: integer = 5 < 6;
+
+x: array[10] array[10] integer;
+
+f2: function string (x: string, y: array[] string, l: integer) = {
+    x: integer = 0;    for (x; x <  <= 5; x++)
+    {
+        if (true)
+        {
+            if (true)
+                print x;
+        }
+        else
+        {
+            print y;
+        }
+    }
+
+}

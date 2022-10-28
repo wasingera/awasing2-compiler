@@ -101,6 +101,8 @@ struct expr * expr_create_array_subscript(struct expr* name, struct expr* bracke
     list->next = bracket_set;
 
     e->next = list;
+
+    return e;
 }
 
 char parse_char(const char* str) {
@@ -183,7 +185,11 @@ char* expand_string(const char* str) {
         } else if (*curr == '\0') {
             buf[i++] = '\\';
             buf[i++] = '0';
+        } else if (*curr == '\\') {
+            buf[i++] = '\\';
+            buf[i++] = '\\';
         } else {
+            /* buf[i++] = '\\'; */
             buf[i++] = *curr;
         }
         curr++;
@@ -279,6 +285,8 @@ int get_expr_rank(struct expr* e) {
         case EXPR_INCR:
         case EXPR_DECR:
             return 8;
+        default:
+            return 0;
     }
 
     return 0;
@@ -320,6 +328,7 @@ void expr_print_val(struct expr* e) {
             break;
         case EXPR_LT:
             printf(" < ");
+            break;
         case EXPR_LE:
             printf(" <= ");
             break;

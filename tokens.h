@@ -105,13 +105,16 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 68 "parser.bison" /* yacc.c:1909  */
+#line 71 "parser.bison" /* yacc.c:1909  */
 
     struct decl *decl;
+    struct type *type;
     struct stmt *stmt;
     struct expr *expr;
+    struct param_list *param_list;
+    char* str;
 
-#line 115 "tokens.h" /* yacc.c:1909  */
+#line 118 "tokens.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

@@ -1,20 +1,32 @@
-bminor: main.o scanner.o parser.o expr.o
-	gcc -o $@ $^
+bminor: main.o scanner.o parser.o expr.o stmt.o type.o decl.o param_list.o
+	gcc -o $@ $^ -g
 
 test-parser: bminor
 	./tests/parser_tests/run_tests.sh
 
 main.o: main.c tokens.h
-	gcc -c -o $@ main.c
+	gcc -c -o $@ main.c -g
+
+decl.o: decl.c decl.h
+	gcc -c -o $@ decl.c
+
+param_list.o: param_list.c param_list.h
+	gcc -c -o $@ param_list.c
+
+stmt.o: stmt.c stmt.h
+	gcc -c -o $@ stmt.c -g
 
 expr.o: expr.c expr.h
-	gcc -c -o $@ expr.c
+	gcc -c -o $@ expr.c -g
+
+type.o: type.c type.h
+	gcc -c -o $@ type.c
 
 scanner.o: scanner.c tokens.h
-	gcc -c -o $@ scanner.c
+	gcc -c -o $@ scanner.c -g
 
 parser.o: parser.c tokens.h
-	gcc -c -o $@ parser.c
+	gcc -c -o $@ parser.c -g
 
 scanner.c: scanner.flex
 	flex -o $@ scanner.flex

@@ -3,13 +3,17 @@
 #include <string.h>
 #include <stdlib.h>
 #include "expr.h"
+#include "stmt.h"
+#include "type.h"
+#include "decl.h"
 
 extern FILE *yyin;
 extern int yylex();
 extern char *yytext;
 extern int yyleng;
 
-extern struct expr* root;
+extern struct decl* root;
+/* extern struct expr* root; */
 
 typedef enum yytokentype token_t;
 
@@ -39,7 +43,9 @@ int print(char* fName) {
     if (parse(fName) != 0)
         return 1;
 
-    expr_print(root, NULL);
+    /* expr_print(root, NULL); */
+    // stmt_print(root, 0);
+    decl_print_list(root);
 
     return 0;
 }
