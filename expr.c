@@ -27,7 +27,7 @@ struct expr* expr_create_array_literal(struct expr* next) {
     struct expr* e = expr_create(EXPR_ARRAY_LITERAL, NULL, NULL);
     struct expr* list = expr_create(EXPR_LIST, NULL, NULL);
     list->next = next;
-    e->next = list;
+    e->middle = list;
 
     return e;
 }
@@ -207,16 +207,6 @@ char* expand_bool(int v) {
         return "false";
 }
 
-int parens_needed(struct expr* e, struct expr* p) {
-    int p_rank = get_expr_rank(p);
-    int e_rank = get_expr_rank(e);
-
-    if (p_rank > 0 && e_rank > 0 && e_rank <= p_rank)
-        return 1;
-
-    return 0;
-}
-
 void expr_print_bracket_set(struct expr* e) {
     if (!e || !e->next) return;
 
@@ -247,9 +237,19 @@ void expr_print_list(struct expr* e) {
 void expr_print_array_literal(struct expr* e) {
     printf("{");
 
-    expr_print_list(e->next);
+    expr_print_list(e->middle);
 
     printf("}");
+}
+
+int parens_needed(struct expr* e, struct expr* p) {
+    int p_rank = get_expr_rank(p);
+    int e_rank = get_expr_rank(e);
+
+    if (p_rank > 0 && e_rank > 0 && e_rank <= p_rank)
+        return 1;
+
+    return 0;
 }
 
 int get_expr_rank(struct expr* e) {

@@ -1,0 +1,10 @@
+// good coding practices
+
+x: integer;
+
+f: function boolean () = {
+    x: integer
+    {
+        x: integer;
+    }
+}

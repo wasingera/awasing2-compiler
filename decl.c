@@ -30,7 +30,7 @@ void decl_print_list(struct decl* d) {
     while (d->next) {
         decl_print(d, 0);
         d = d->next;
-        printf("\n\n");
+        printf("\n");
     }
     decl_print(d, 0);
 }
@@ -43,7 +43,7 @@ void decl_print(struct decl* d, int indent) {
         type_print(d->type);
 
         if (!d->value) {
-            printf(";\n");
+            printf(";");
             return;
         }
 
@@ -60,7 +60,6 @@ void decl_print(struct decl* d, int indent) {
             printf(";");
             return;
         }
-
 
         printf(" = {\n");
         stmt_print(d->code, 1);

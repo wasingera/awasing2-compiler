@@ -51,8 +51,10 @@ int print(char* fName) {
 		return 1;
 	}
 
-    if (yyparse() != 0)
+    if (yyparse() != 0) {
+        printf("Parse failed: %s\n", yytext);
         return 1;
+    }
 
     decl_print_list(root);
 

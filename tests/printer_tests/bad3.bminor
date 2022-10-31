@@ -1,0 +1,3 @@
+CLEAN_MUD: function string = () {
+    if !MUD return true;
+}
