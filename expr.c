@@ -85,12 +85,12 @@ struct expr * expr_create_string_literal( const char *str ) {
 
 }
 
-struct expr * expr_create_func_call(struct expr*  name, struct expr* args) {
+struct expr * expr_create_func_call(struct expr* name, struct expr* args) {
     struct expr* list = expr_create(EXPR_LIST, NULL, NULL);
     list->next = args;
 
     struct expr* e = expr_create(EXPR_FUNC_CALL, name, NULL);
-    e->next = list;
+    e->middle = list;
 
     return e;
 }
@@ -100,7 +100,7 @@ struct expr * expr_create_array_subscript(struct expr* name, struct expr* bracke
     struct expr* list = expr_create(EXPR_LIST, NULL, NULL);
     list->next = bracket_set;
 
-    e->next = list;
+    e->middle = list;
 
     return e;
 }
@@ -211,7 +211,7 @@ int parens_needed(struct expr* e, struct expr* p) {
     int p_rank = get_expr_rank(p);
     int e_rank = get_expr_rank(e);
 
-    if (p_rank > 0 && e_rank > 0 && e_rank < p_rank)
+    if (p_rank > 0 && e_rank > 0 && e_rank <= p_rank)
         return 1;
 
     return 0;
@@ -394,12 +394,12 @@ void expr_print_val(struct expr* e) {
             break;
         case EXPR_FUNC_CALL:
             printf("(");
-            expr_print_list(e->next);
+            expr_print_list(e->middle);
             printf(")");
             break;
         case EXPR_LIST:
             expr_print_list(e);
         case EXPR_ARRAY_SUBSCRIPT:
-            expr_print_bracket_set(e->next);
+            expr_print_bracket_set(e->middle);
     }
 }

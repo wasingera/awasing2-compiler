@@ -3,8 +3,11 @@ x: integer = 5 < 6;
 x: array[10] array[10] integer;
 
 f2: function string (x: string, y: array[] string, l: integer) = {
-    x: integer = 0;    for (x; x <  <= 5; x++)
+    x: integer = (x + y) + 5;
+    f(1+3, "f");
+    for (x; (x <= 5); x++)
     {
+        y: char = 'c';
         if (true)
         {
             if (true)

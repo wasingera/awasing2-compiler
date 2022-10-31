@@ -114,7 +114,7 @@ void stmt_print_val(struct stmt* s, int indent) {
 
             if (s->else_body) {
                 printf("%selse\n", indent_string);
-                stmt_print(s->else_body, indent + get_indent_body(s->body));
+                stmt_print(s->else_body, indent + get_indent_body(s->else_body));
             }
             break;
         case STMT_FOR:
@@ -125,7 +125,7 @@ void stmt_print_val(struct stmt* s, int indent) {
             break;
         case STMT_DECL:
             printf("%s", indent_string);
-            decl_print(s->decl, 0);
+            decl_print(s->decl, indent);
             printf("\n");
             break;
         case STMT_LIST:
