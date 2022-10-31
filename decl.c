@@ -26,6 +26,7 @@ struct decl * decl_create_func_body(char* name, struct type* type, struct stmt* 
 }
 
 void decl_print_list(struct decl* d) {
+    if (!d) return;
     while (d->next) {
         decl_print(d, 0);
         d = d->next;

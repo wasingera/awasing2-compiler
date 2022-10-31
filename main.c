@@ -40,11 +40,20 @@ int main(int argc, char** argv) {
 }
 
 int print(char* fName) {
-    if (parse(fName) != 0)
+    if (!fName) {
+        printf("Need a file to parse!\n");
+        return 1;
+    }
+
+	yyin = fopen(fName,"r");
+	if (!yyin) {
+		printf("could not open %s!\n", fName);
+		return 1;
+	}
+
+    if (yyparse() != 0)
         return 1;
 
-    /* expr_print(root, NULL); */
-    // stmt_print(root, 0);
     decl_print_list(root);
 
     return 0;

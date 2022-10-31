@@ -1,6 +1,9 @@
 bminor: main.o scanner.o parser.o expr.o stmt.o type.o decl.o param_list.o
 	gcc -o $@ $^ -g
 
+test-printer: bminor
+	./tests/printer_tests/run_tests.sh
+
 test-parser: bminor
 	./tests/parser_tests/run_tests.sh
 
@@ -36,3 +39,7 @@ parser.c: parser.bison
 
 clean:
 	rm ./bminor ./*.o
+	find tests -name "*.out*" -type f -delete
+
+clean-tests:
+	find tests -name "*.out*" -type f -delete
