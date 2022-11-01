@@ -54,7 +54,9 @@ void decl_print(struct decl* d, int indent) {
         printf("%s: ", d->name);
         type_print(d->type);
 
-        param_list_print(d->type->params);
+        // if (d->type->subtype->kind == TYPE_FUNCTION)
+        //     param_list_print(d->type->subtype->params);
+        // param_list_print(d->type->params);
 
         if (!d->code) {
             printf(";");

@@ -119,7 +119,7 @@ type_func: INTEGER param_list_e { $$ = type_create_function(TYPE_INTEGER, $2); }
          | STRING param_list_e { $$ = type_create_function(TYPE_STRING, $2); }
          | VOID param_list_e { $$ = type_create_function(TYPE_VOID, $2); }
          | AUTO param_list_e { $$ = type_create_function(TYPE_AUTO, $2); }
-         | FUNCTION type_func { $$ = type_create(TYPE_FUNCTION, $2, NULL); }
+         | FUNCTION type_func param_list_e { $$ = type_create(TYPE_FUNCTION, $2, $3); }
          ;
 
 param_list_e: OPEN_PAREN param_list CLOSE_PAREN { $$ = $2; }

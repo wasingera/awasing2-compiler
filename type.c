@@ -51,6 +51,7 @@ void type_print(struct type* t) {
         case TYPE_FUNCTION:
             printf("function ");
             type_print(t->subtype);
+            param_list_print(t->params);
             break;
         case TYPE_ARRAY:
             printf("array[");

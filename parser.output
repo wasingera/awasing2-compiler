@@ -32,7 +32,7 @@ Grammar
    14          | STRING param_list_e
    15          | VOID param_list_e
    16          | AUTO param_list_e
-   17          | FUNCTION type_func
+   17          | FUNCTION type_func param_list_e
 
    18 param_list_e: OPEN_PAREN param_list CLOSE_PAREN
    19             | OPEN_PAREN CLOSE_PAREN
@@ -225,7 +225,7 @@ decl_func (59)
 type_func (60)
     on left: 11 12 13 14 15 16 17, on right: 9 10 17
 param_list_e (61)
-    on left: 18 19, on right: 11 12 13 14 15 16
+    on left: 18 19, on right: 11 12 13 14 15 16 17
 param_list (62)
     on left: 20 21, on right: 18 20
 type_param (63)
@@ -463,7 +463,7 @@ State 14
    14          | . STRING param_list_e
    15          | . VOID param_list_e
    16          | . AUTO param_list_e
-   17          | . FUNCTION type_func
+   17          | . FUNCTION type_func param_list_e
 
     AUTO      shift, and go to state 19
     BOOLEAN   shift, and go to state 20
@@ -614,8 +614,8 @@ State 22
    14          | . STRING param_list_e
    15          | . VOID param_list_e
    16          | . AUTO param_list_e
-   17          | . FUNCTION type_func
-   17          | FUNCTION . type_func
+   17          | . FUNCTION type_func param_list_e
+   17          | FUNCTION . type_func param_list_e
 
     AUTO      shift, and go to state 19
     BOOLEAN   shift, and go to state 20
@@ -1222,9 +1222,13 @@ State 56
 
 State 57
 
-   17 type_func: FUNCTION type_func .
+   17 type_func: FUNCTION type_func . param_list_e
+   18 param_list_e: . OPEN_PAREN param_list CLOSE_PAREN
+   19             | . OPEN_PAREN CLOSE_PAREN
 
-    $default  reduce using rule 17 (type_func)
+    OPEN_PAREN  shift, and go to state 53
+
+    param_list_e  go to state 95
 
 
 State 58
@@ -1259,21 +1263,21 @@ State 62
 
    10 decl_func: IDENTIFIER COLON FUNCTION type_func EQUALS . OPEN_CURLY stmt_list CLOSE_CURLY
 
-    OPEN_CURLY  shift, and go to state 95
+    OPEN_CURLY  shift, and go to state 96
 
 
 State 63
 
     8 decl_var: IDENTIFIER COLON type_var EQUALS expr_10 . SEMICOLON
 
-    SEMICOLON  shift, and go to state 96
+    SEMICOLON  shift, and go to state 97
 
 
 State 64
 
    86 expr_1: OPEN_PAREN expr_10 . CLOSE_PAREN
 
-    CLOSE_PAREN  shift, and go to state 97
+    CLOSE_PAREN  shift, and go to state 98
 
 
 State 65
@@ -1288,7 +1292,7 @@ State 66
    97 expr_list: expr_10 . COMMA expr_list
    98          | expr_10 .  [SEMICOLON, CLOSE_PAREN, CLOSE_CURLY]
 
-    COMMA  shift, and go to state 98
+    COMMA  shift, and go to state 99
 
     $default  reduce using rule 98 (expr_list)
 
@@ -1297,7 +1301,7 @@ State 67
 
   104 atomic: OPEN_CURLY expr_list . CLOSE_CURLY
 
-    CLOSE_CURLY  shift, and go to state 99
+    CLOSE_CURLY  shift, and go to state 100
 
 
 State 68
@@ -1332,7 +1336,7 @@ State 70
     INTEGER  shift, and go to state 15
     STRING   shift, and go to state 16
 
-    type_var  go to state 100
+    type_var  go to state 101
 
 
 State 71
@@ -1391,7 +1395,7 @@ State 71
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    expr_10          go to state 101
+    expr_10          go to state 102
     expr_9           go to state 40
     expr_8           go to state 41
     expr_7           go to state 42
@@ -1463,7 +1467,7 @@ State 72
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    expr_10          go to state 102
+    expr_10          go to state 103
     expr_9           go to state 40
     expr_8           go to state 41
     expr_7           go to state 42
@@ -1530,7 +1534,7 @@ State 73
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    expr_8           go to state 103
+    expr_8           go to state 104
     expr_7           go to state 42
     expr_6           go to state 43
     expr_5           go to state 44
@@ -1593,7 +1597,7 @@ State 74
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    expr_7           go to state 104
+    expr_7           go to state 105
     expr_6           go to state 43
     expr_5           go to state 44
     expr_4           go to state 45
@@ -1648,7 +1652,7 @@ State 75
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    expr_6           go to state 105
+    expr_6           go to state 106
     expr_5           go to state 44
     expr_4           go to state 45
     expr_3           go to state 46
@@ -1702,7 +1706,7 @@ State 76
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    expr_6           go to state 106
+    expr_6           go to state 107
     expr_5           go to state 44
     expr_4           go to state 45
     expr_3           go to state 46
@@ -1756,7 +1760,7 @@ State 77
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    expr_6           go to state 107
+    expr_6           go to state 108
     expr_5           go to state 44
     expr_4           go to state 45
     expr_3           go to state 46
@@ -1810,7 +1814,7 @@ State 78
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    expr_6           go to state 108
+    expr_6           go to state 109
     expr_5           go to state 44
     expr_4           go to state 45
     expr_3           go to state 46
@@ -1864,7 +1868,7 @@ State 79
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    expr_6           go to state 109
+    expr_6           go to state 110
     expr_5           go to state 44
     expr_4           go to state 45
     expr_3           go to state 46
@@ -1918,7 +1922,7 @@ State 80
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    expr_6           go to state 110
+    expr_6           go to state 111
     expr_5           go to state 44
     expr_4           go to state 45
     expr_3           go to state 46
@@ -1969,7 +1973,7 @@ State 81
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    expr_5           go to state 111
+    expr_5           go to state 112
     expr_4           go to state 45
     expr_3           go to state 46
     expr_2           go to state 47
@@ -2019,7 +2023,7 @@ State 82
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    expr_5           go to state 112
+    expr_5           go to state 113
     expr_4           go to state 45
     expr_3           go to state 46
     expr_2           go to state 47
@@ -2065,7 +2069,7 @@ State 83
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    expr_4           go to state 113
+    expr_4           go to state 114
     expr_3           go to state 46
     expr_2           go to state 47
     expr_1           go to state 48
@@ -2110,7 +2114,7 @@ State 84
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    expr_4           go to state 114
+    expr_4           go to state 115
     expr_3           go to state 46
     expr_2           go to state 47
     expr_1           go to state 48
@@ -2155,7 +2159,7 @@ State 85
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    expr_4           go to state 115
+    expr_4           go to state 116
     expr_3           go to state 46
     expr_2           go to state 47
     expr_1           go to state 48
@@ -2200,7 +2204,7 @@ State 86
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    expr_4           go to state 116
+    expr_4           go to state 117
     expr_3           go to state 46
     expr_2           go to state 47
     expr_1           go to state 48
@@ -2299,8 +2303,8 @@ State 89
     func_call        go to state 49
     ident_name       go to state 50
     array_subscript  go to state 51
-    expr_list_e      go to state 117
-    expr_list        go to state 118
+    expr_list_e      go to state 118
+    expr_list        go to state 119
     atomic           go to state 52
 
 
@@ -2361,7 +2365,7 @@ State 90
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    expr_10          go to state 119
+    expr_10          go to state 120
     expr_9           go to state 40
     expr_8           go to state 41
     expr_7           go to state 42
@@ -2389,7 +2393,7 @@ State 92
    20 param_list: IDENTIFIER . COLON type_param COMMA param_list
    21           | IDENTIFIER . COLON type_param
 
-    COLON  shift, and go to state 120
+    COLON  shift, and go to state 121
 
 
 State 93
@@ -2403,10 +2407,17 @@ State 94
 
    18 param_list_e: OPEN_PAREN param_list . CLOSE_PAREN
 
-    CLOSE_PAREN  shift, and go to state 121
+    CLOSE_PAREN  shift, and go to state 122
 
 
 State 95
+
+   17 type_func: FUNCTION type_func param_list_e .
+
+    $default  reduce using rule 17 (type_func)
+
+
+State 96
 
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
@@ -2470,28 +2481,28 @@ State 95
   103       | . ident_name
   104       | . OPEN_CURLY expr_list CLOSE_CURLY
 
-    FOR              shift, and go to state 122
-    IF               shift, and go to state 123
-    PRINT            shift, and go to state 124
-    RETURN           shift, and go to state 125
+    FOR              shift, and go to state 123
+    IF               shift, and go to state 124
+    PRINT            shift, and go to state 125
+    RETURN           shift, and go to state 126
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
     CHAR_LITERAL     shift, and go to state 31
     STRING_LITERAL   shift, and go to state 32
-    IDENTIFIER       shift, and go to state 126
+    IDENTIFIER       shift, and go to state 127
     OPEN_PAREN       shift, and go to state 34
-    OPEN_CURLY       shift, and go to state 127
+    OPEN_CURLY       shift, and go to state 128
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    decl_var         go to state 128
-    stmt             go to state 129
-    other_stmt       go to state 130
-    if_stmt          go to state 131
-    matched_if_stmt  go to state 132
-    open_if_stmt     go to state 133
-    stmt_list        go to state 134
-    expr_10          go to state 135
+    decl_var         go to state 129
+    stmt             go to state 130
+    other_stmt       go to state 131
+    if_stmt          go to state 132
+    matched_if_stmt  go to state 133
+    open_if_stmt     go to state 134
+    stmt_list        go to state 135
+    expr_10          go to state 136
     expr_9           go to state 40
     expr_8           go to state 41
     expr_7           go to state 42
@@ -2507,21 +2518,21 @@ State 95
     atomic           go to state 52
 
 
-State 96
+State 97
 
     8 decl_var: IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON .
 
     $default  reduce using rule 8 (decl_var)
 
 
-State 97
+State 98
 
    86 expr_1: OPEN_PAREN expr_10 CLOSE_PAREN .
 
     $default  reduce using rule 86 (expr_1)
 
 
-State 98
+State 99
 
    57 expr_10: . expr_9 EQUALS expr_10
    58        | . expr_9 QUESTION expr_10 COLON expr_10
@@ -2592,39 +2603,39 @@ State 98
     func_call        go to state 49
     ident_name       go to state 50
     array_subscript  go to state 51
-    expr_list        go to state 136
+    expr_list        go to state 137
     atomic           go to state 52
 
 
-State 99
+State 100
 
   104 atomic: OPEN_CURLY expr_list CLOSE_CURLY .
 
     $default  reduce using rule 104 (atomic)
 
 
-State 100
+State 101
 
    34 type_var: ARRAY OPEN_SQUARE expr_10 CLOSE_SQUARE type_var .
 
     $default  reduce using rule 34 (type_var)
 
 
-State 101
+State 102
 
    58 expr_10: expr_9 QUESTION expr_10 . COLON expr_10
 
-    COLON  shift, and go to state 137
+    COLON  shift, and go to state 138
 
 
-State 102
+State 103
 
    57 expr_10: expr_9 EQUALS expr_10 .
 
     $default  reduce using rule 57 (expr_10)
 
 
-State 103
+State 104
 
    60 expr_9: expr_9 OR expr_8 .  [SEMICOLON, COLON, QUESTION, EQUALS, OR, CLOSE_PAREN, CLOSE_SQUARE, CLOSE_CURLY, COMMA]
    62 expr_8: expr_8 . AND expr_7
@@ -2634,7 +2645,7 @@ State 103
     $default  reduce using rule 60 (expr_9)
 
 
-State 104
+State 105
 
    62 expr_8: expr_8 AND expr_7 .  [SEMICOLON, COLON, QUESTION, EQUALS, AND, OR, CLOSE_PAREN, CLOSE_SQUARE, CLOSE_CURLY, COMMA]
    64 expr_7: expr_7 . LT expr_6
@@ -2654,7 +2665,7 @@ State 104
     $default  reduce using rule 62 (expr_8)
 
 
-State 105
+State 106
 
    68 expr_7: expr_7 GT expr_6 .  [SEMICOLON, COLON, QUESTION, EQUALS, GT, GE, LT, LE, EE, NE, AND, OR, CLOSE_PAREN, CLOSE_SQUARE, CLOSE_CURLY, COMMA]
    71 expr_6: expr_6 . PLUS expr_5
@@ -2666,7 +2677,7 @@ State 105
     $default  reduce using rule 68 (expr_7)
 
 
-State 106
+State 107
 
    67 expr_7: expr_7 GE expr_6 .  [SEMICOLON, COLON, QUESTION, EQUALS, GT, GE, LT, LE, EE, NE, AND, OR, CLOSE_PAREN, CLOSE_SQUARE, CLOSE_CURLY, COMMA]
    71 expr_6: expr_6 . PLUS expr_5
@@ -2678,7 +2689,7 @@ State 106
     $default  reduce using rule 67 (expr_7)
 
 
-State 107
+State 108
 
    64 expr_7: expr_7 LT expr_6 .  [SEMICOLON, COLON, QUESTION, EQUALS, GT, GE, LT, LE, EE, NE, AND, OR, CLOSE_PAREN, CLOSE_SQUARE, CLOSE_CURLY, COMMA]
    71 expr_6: expr_6 . PLUS expr_5
@@ -2690,7 +2701,7 @@ State 107
     $default  reduce using rule 64 (expr_7)
 
 
-State 108
+State 109
 
    65 expr_7: expr_7 LE expr_6 .  [SEMICOLON, COLON, QUESTION, EQUALS, GT, GE, LT, LE, EE, NE, AND, OR, CLOSE_PAREN, CLOSE_SQUARE, CLOSE_CURLY, COMMA]
    71 expr_6: expr_6 . PLUS expr_5
@@ -2702,7 +2713,7 @@ State 108
     $default  reduce using rule 65 (expr_7)
 
 
-State 109
+State 110
 
    66 expr_7: expr_7 EE expr_6 .  [SEMICOLON, COLON, QUESTION, EQUALS, GT, GE, LT, LE, EE, NE, AND, OR, CLOSE_PAREN, CLOSE_SQUARE, CLOSE_CURLY, COMMA]
    71 expr_6: expr_6 . PLUS expr_5
@@ -2714,7 +2725,7 @@ State 109
     $default  reduce using rule 66 (expr_7)
 
 
-State 110
+State 111
 
    69 expr_7: expr_7 NE expr_6 .  [SEMICOLON, COLON, QUESTION, EQUALS, GT, GE, LT, LE, EE, NE, AND, OR, CLOSE_PAREN, CLOSE_SQUARE, CLOSE_CURLY, COMMA]
    71 expr_6: expr_6 . PLUS expr_5
@@ -2726,7 +2737,7 @@ State 110
     $default  reduce using rule 69 (expr_7)
 
 
-State 111
+State 112
 
    71 expr_6: expr_6 PLUS expr_5 .  [SEMICOLON, COLON, QUESTION, EQUALS, GT, GE, LT, LE, EE, NE, AND, OR, CLOSE_PAREN, CLOSE_SQUARE, CLOSE_CURLY, PLUS, MINUS, COMMA]
    74 expr_5: expr_5 . MULTIPLY expr_4
@@ -2740,7 +2751,7 @@ State 111
     $default  reduce using rule 71 (expr_6)
 
 
-State 112
+State 113
 
    72 expr_6: expr_6 MINUS expr_5 .  [SEMICOLON, COLON, QUESTION, EQUALS, GT, GE, LT, LE, EE, NE, AND, OR, CLOSE_PAREN, CLOSE_SQUARE, CLOSE_CURLY, PLUS, MINUS, COMMA]
    74 expr_5: expr_5 . MULTIPLY expr_4
@@ -2754,57 +2765,57 @@ State 112
     $default  reduce using rule 72 (expr_6)
 
 
-State 113
+State 114
 
    74 expr_5: expr_5 MULTIPLY expr_4 .
 
     $default  reduce using rule 74 (expr_5)
 
 
-State 114
+State 115
 
    75 expr_5: expr_5 DIVIDE expr_4 .
 
     $default  reduce using rule 75 (expr_5)
 
 
-State 115
+State 116
 
    76 expr_5: expr_5 REMAINDER expr_4 .
 
     $default  reduce using rule 76 (expr_5)
 
 
-State 116
+State 117
 
    78 expr_4: expr_3 EXP expr_4 .
 
     $default  reduce using rule 78 (expr_4)
 
 
-State 117
+State 118
 
    90 func_call: ident_name OPEN_PAREN expr_list_e . CLOSE_PAREN
 
-    CLOSE_PAREN  shift, and go to state 138
+    CLOSE_PAREN  shift, and go to state 139
 
 
-State 118
+State 119
 
    95 expr_list_e: expr_list .
 
     $default  reduce using rule 95 (expr_list_e)
 
 
-State 119
+State 120
 
    93 bracket_set: OPEN_SQUARE expr_10 . CLOSE_SQUARE bracket_set
    94            | OPEN_SQUARE expr_10 . CLOSE_SQUARE
 
-    CLOSE_SQUARE  shift, and go to state 139
+    CLOSE_SQUARE  shift, and go to state 140
 
 
-State 120
+State 121
 
    20 param_list: IDENTIFIER COLON . type_param COMMA param_list
    21           | IDENTIFIER COLON . type_param
@@ -2816,45 +2827,45 @@ State 120
    27           | . FUNCTION
    28           | . ARRAY OPEN_SQUARE CLOSE_SQUARE type_param
 
-    ARRAY     shift, and go to state 140
-    AUTO      shift, and go to state 141
-    BOOLEAN   shift, and go to state 142
-    CHAR      shift, and go to state 143
-    FUNCTION  shift, and go to state 144
-    INTEGER   shift, and go to state 145
-    STRING    shift, and go to state 146
+    ARRAY     shift, and go to state 141
+    AUTO      shift, and go to state 142
+    BOOLEAN   shift, and go to state 143
+    CHAR      shift, and go to state 144
+    FUNCTION  shift, and go to state 145
+    INTEGER   shift, and go to state 146
+    STRING    shift, and go to state 147
 
-    type_param  go to state 147
+    type_param  go to state 148
 
 
-State 121
+State 122
 
    18 param_list_e: OPEN_PAREN param_list CLOSE_PAREN .
 
     $default  reduce using rule 18 (param_list_e)
 
 
-State 122
+State 123
 
    46 matched_if_stmt: FOR . OPEN_PAREN expr_or_e SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN matched_if_stmt
    50 open_if_stmt: FOR . OPEN_PAREN expr_or_e SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN open_if_stmt
 
-    OPEN_PAREN  shift, and go to state 148
+    OPEN_PAREN  shift, and go to state 149
 
 
-State 123
+State 124
 
    42 condition: . OPEN_PAREN expr_10 CLOSE_PAREN
    45 matched_if_stmt: IF . condition matched_if_stmt ELSE matched_if_stmt
    48 open_if_stmt: IF . condition if_stmt
    49             | IF . condition matched_if_stmt ELSE open_if_stmt
 
-    OPEN_PAREN  shift, and go to state 149
+    OPEN_PAREN  shift, and go to state 150
 
-    condition  go to state 150
+    condition  go to state 151
 
 
-State 124
+State 125
 
    38 other_stmt: PRINT . expr_list_e SEMICOLON
    57 expr_10: . expr_9 EQUALS expr_10
@@ -2929,12 +2940,12 @@ State 124
     func_call        go to state 49
     ident_name       go to state 50
     array_subscript  go to state 51
-    expr_list_e      go to state 151
-    expr_list        go to state 118
+    expr_list_e      go to state 152
+    expr_list        go to state 119
     atomic           go to state 52
 
 
-State 125
+State 126
 
    37 other_stmt: RETURN . expr_or_e SEMICOLON
    51 expr_or_e: . expr_10
@@ -2994,8 +3005,8 @@ State 125
 
     $default  reduce using rule 52 (expr_or_e)
 
-    expr_or_e        go to state 152
-    expr_10          go to state 153
+    expr_or_e        go to state 153
+    expr_10          go to state 154
     expr_9           go to state 40
     expr_8           go to state 41
     expr_7           go to state 42
@@ -3011,18 +3022,18 @@ State 125
     atomic           go to state 52
 
 
-State 126
+State 127
 
     7 decl_var: IDENTIFIER . COLON type_var SEMICOLON
     8         | IDENTIFIER . COLON type_var EQUALS expr_10 SEMICOLON
    91 ident_name: IDENTIFIER .  [SEMICOLON, QUESTION, EQUALS, GT, GE, LT, LE, EE, NE, AND, OR, INCREMENT, DECREMENT, OPEN_PAREN, OPEN_SQUARE, CLOSE_CURLY, PLUS, MINUS, MULTIPLY, DIVIDE, REMAINDER, EXP, COMMA]
 
-    COLON  shift, and go to state 154
+    COLON  shift, and go to state 155
 
     $default  reduce using rule 91 (ident_name)
 
 
-State 127
+State 128
 
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
@@ -3091,31 +3102,31 @@ State 127
   104       | . OPEN_CURLY expr_list CLOSE_CURLY
   104       | OPEN_CURLY . expr_list CLOSE_CURLY
 
-    FOR              shift, and go to state 122
-    IF               shift, and go to state 123
-    PRINT            shift, and go to state 124
-    RETURN           shift, and go to state 125
+    FOR              shift, and go to state 123
+    IF               shift, and go to state 124
+    PRINT            shift, and go to state 125
+    RETURN           shift, and go to state 126
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
     CHAR_LITERAL     shift, and go to state 31
     STRING_LITERAL   shift, and go to state 32
-    IDENTIFIER       shift, and go to state 126
+    IDENTIFIER       shift, and go to state 127
     OPEN_PAREN       shift, and go to state 34
-    OPEN_CURLY       shift, and go to state 127
+    OPEN_CURLY       shift, and go to state 128
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
     $default  reduce using rule 54 (stmt_list_e)
 
-    decl_var         go to state 128
-    stmt             go to state 129
-    other_stmt       go to state 130
-    if_stmt          go to state 131
-    matched_if_stmt  go to state 132
-    open_if_stmt     go to state 133
-    stmt_list_e      go to state 155
-    stmt_list        go to state 156
-    expr_10          go to state 157
+    decl_var         go to state 129
+    stmt             go to state 130
+    other_stmt       go to state 131
+    if_stmt          go to state 132
+    matched_if_stmt  go to state 133
+    open_if_stmt     go to state 134
+    stmt_list_e      go to state 156
+    stmt_list        go to state 157
+    expr_10          go to state 158
     expr_9           go to state 40
     expr_8           go to state 41
     expr_7           go to state 42
@@ -3132,14 +3143,14 @@ State 127
     atomic           go to state 52
 
 
-State 128
+State 129
 
    41 other_stmt: decl_var .
 
     $default  reduce using rule 41 (other_stmt)
 
 
-State 129
+State 130
 
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
@@ -3204,30 +3215,30 @@ State 129
   103       | . ident_name
   104       | . OPEN_CURLY expr_list CLOSE_CURLY
 
-    FOR              shift, and go to state 122
-    IF               shift, and go to state 123
-    PRINT            shift, and go to state 124
-    RETURN           shift, and go to state 125
+    FOR              shift, and go to state 123
+    IF               shift, and go to state 124
+    PRINT            shift, and go to state 125
+    RETURN           shift, and go to state 126
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
     CHAR_LITERAL     shift, and go to state 31
     STRING_LITERAL   shift, and go to state 32
-    IDENTIFIER       shift, and go to state 126
+    IDENTIFIER       shift, and go to state 127
     OPEN_PAREN       shift, and go to state 34
-    OPEN_CURLY       shift, and go to state 127
+    OPEN_CURLY       shift, and go to state 128
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
     $default  reduce using rule 56 (stmt_list)
 
-    decl_var         go to state 128
-    stmt             go to state 129
-    other_stmt       go to state 130
-    if_stmt          go to state 131
-    matched_if_stmt  go to state 132
-    open_if_stmt     go to state 133
-    stmt_list        go to state 158
-    expr_10          go to state 135
+    decl_var         go to state 129
+    stmt             go to state 130
+    other_stmt       go to state 131
+    if_stmt          go to state 132
+    matched_if_stmt  go to state 133
+    open_if_stmt     go to state 134
+    stmt_list        go to state 159
+    expr_10          go to state 136
     expr_9           go to state 40
     expr_8           go to state 41
     expr_7           go to state 42
@@ -3243,56 +3254,56 @@ State 129
     atomic           go to state 52
 
 
-State 130
+State 131
 
    47 matched_if_stmt: other_stmt .
 
     $default  reduce using rule 47 (matched_if_stmt)
 
 
-State 131
+State 132
 
    36 stmt: if_stmt .
 
     $default  reduce using rule 36 (stmt)
 
 
-State 132
+State 133
 
    43 if_stmt: matched_if_stmt .
 
     $default  reduce using rule 43 (if_stmt)
 
 
-State 133
+State 134
 
    44 if_stmt: open_if_stmt .
 
     $default  reduce using rule 44 (if_stmt)
 
 
-State 134
+State 135
 
    10 decl_func: IDENTIFIER COLON FUNCTION type_func EQUALS OPEN_CURLY stmt_list . CLOSE_CURLY
 
-    CLOSE_CURLY  shift, and go to state 159
-
-
-State 135
-
-   40 other_stmt: expr_10 . SEMICOLON
-
-    SEMICOLON  shift, and go to state 160
+    CLOSE_CURLY  shift, and go to state 160
 
 
 State 136
+
+   40 other_stmt: expr_10 . SEMICOLON
+
+    SEMICOLON  shift, and go to state 161
+
+
+State 137
 
    97 expr_list: expr_10 COMMA expr_list .
 
     $default  reduce using rule 97 (expr_list)
 
 
-State 137
+State 138
 
    57 expr_10: . expr_9 EQUALS expr_10
    58        | . expr_9 QUESTION expr_10 COLON expr_10
@@ -3348,7 +3359,7 @@ State 137
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    expr_10          go to state 161
+    expr_10          go to state 162
     expr_9           go to state 40
     expr_8           go to state 41
     expr_7           go to state 42
@@ -3364,14 +3375,14 @@ State 137
     atomic           go to state 52
 
 
-State 138
+State 139
 
    90 func_call: ident_name OPEN_PAREN expr_list_e CLOSE_PAREN .
 
     $default  reduce using rule 90 (func_call)
 
 
-State 139
+State 140
 
    93 bracket_set: . OPEN_SQUARE expr_10 CLOSE_SQUARE bracket_set
    93            | OPEN_SQUARE expr_10 CLOSE_SQUARE . bracket_set
@@ -3382,69 +3393,69 @@ State 139
 
     $default  reduce using rule 94 (bracket_set)
 
-    bracket_set  go to state 162
-
-
-State 140
-
-   28 type_param: ARRAY . OPEN_SQUARE CLOSE_SQUARE type_param
-
-    OPEN_SQUARE  shift, and go to state 163
+    bracket_set  go to state 163
 
 
 State 141
+
+   28 type_param: ARRAY . OPEN_SQUARE CLOSE_SQUARE type_param
+
+    OPEN_SQUARE  shift, and go to state 164
+
+
+State 142
 
    26 type_param: AUTO .
 
     $default  reduce using rule 26 (type_param)
 
 
-State 142
+State 143
 
    23 type_param: BOOLEAN .
 
     $default  reduce using rule 23 (type_param)
 
 
-State 143
+State 144
 
    24 type_param: CHAR .
 
     $default  reduce using rule 24 (type_param)
 
 
-State 144
+State 145
 
    27 type_param: FUNCTION .
 
     $default  reduce using rule 27 (type_param)
 
 
-State 145
+State 146
 
    22 type_param: INTEGER .
 
     $default  reduce using rule 22 (type_param)
 
 
-State 146
+State 147
 
    25 type_param: STRING .
 
     $default  reduce using rule 25 (type_param)
 
 
-State 147
+State 148
 
    20 param_list: IDENTIFIER COLON type_param . COMMA param_list
    21           | IDENTIFIER COLON type_param .  [CLOSE_PAREN]
 
-    COMMA  shift, and go to state 164
+    COMMA  shift, and go to state 165
 
     $default  reduce using rule 21 (param_list)
 
 
-State 148
+State 149
 
    46 matched_if_stmt: FOR OPEN_PAREN . expr_or_e SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN matched_if_stmt
    50 open_if_stmt: FOR OPEN_PAREN . expr_or_e SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN open_if_stmt
@@ -3505,8 +3516,8 @@ State 148
 
     $default  reduce using rule 52 (expr_or_e)
 
-    expr_or_e        go to state 165
-    expr_10          go to state 153
+    expr_or_e        go to state 166
+    expr_10          go to state 154
     expr_9           go to state 40
     expr_8           go to state 41
     expr_7           go to state 42
@@ -3522,7 +3533,7 @@ State 148
     atomic           go to state 52
 
 
-State 149
+State 150
 
    42 condition: OPEN_PAREN . expr_10 CLOSE_PAREN
    57 expr_10: . expr_9 EQUALS expr_10
@@ -3578,7 +3589,7 @@ State 149
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    expr_10          go to state 166
+    expr_10          go to state 167
     expr_9           go to state 40
     expr_8           go to state 41
     expr_7           go to state 42
@@ -3594,7 +3605,7 @@ State 149
     atomic           go to state 52
 
 
-State 150
+State 151
 
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
@@ -3657,26 +3668,26 @@ State 150
   103       | . ident_name
   104       | . OPEN_CURLY expr_list CLOSE_CURLY
 
-    FOR              shift, and go to state 122
-    IF               shift, and go to state 123
-    PRINT            shift, and go to state 124
-    RETURN           shift, and go to state 125
+    FOR              shift, and go to state 123
+    IF               shift, and go to state 124
+    PRINT            shift, and go to state 125
+    RETURN           shift, and go to state 126
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
     CHAR_LITERAL     shift, and go to state 31
     STRING_LITERAL   shift, and go to state 32
-    IDENTIFIER       shift, and go to state 126
+    IDENTIFIER       shift, and go to state 127
     OPEN_PAREN       shift, and go to state 34
-    OPEN_CURLY       shift, and go to state 127
+    OPEN_CURLY       shift, and go to state 128
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    decl_var         go to state 128
-    other_stmt       go to state 130
-    if_stmt          go to state 167
-    matched_if_stmt  go to state 168
-    open_if_stmt     go to state 133
-    expr_10          go to state 135
+    decl_var         go to state 129
+    other_stmt       go to state 131
+    if_stmt          go to state 168
+    matched_if_stmt  go to state 169
+    open_if_stmt     go to state 134
+    expr_10          go to state 136
     expr_9           go to state 40
     expr_8           go to state 41
     expr_7           go to state 42
@@ -3692,28 +3703,28 @@ State 150
     atomic           go to state 52
 
 
-State 151
-
-   38 other_stmt: PRINT expr_list_e . SEMICOLON
-
-    SEMICOLON  shift, and go to state 169
-
-
 State 152
 
-   37 other_stmt: RETURN expr_or_e . SEMICOLON
+   38 other_stmt: PRINT expr_list_e . SEMICOLON
 
     SEMICOLON  shift, and go to state 170
 
 
 State 153
 
+   37 other_stmt: RETURN expr_or_e . SEMICOLON
+
+    SEMICOLON  shift, and go to state 171
+
+
+State 154
+
    51 expr_or_e: expr_10 .
 
     $default  reduce using rule 51 (expr_or_e)
 
 
-State 154
+State 155
 
     7 decl_var: IDENTIFIER COLON . type_var SEMICOLON
     8         | IDENTIFIER COLON . type_var EQUALS expr_10 SEMICOLON
@@ -3735,75 +3746,75 @@ State 154
     type_var  go to state 17
 
 
-State 155
+State 156
 
    39 other_stmt: OPEN_CURLY stmt_list_e . CLOSE_CURLY
 
-    CLOSE_CURLY  shift, and go to state 171
+    CLOSE_CURLY  shift, and go to state 172
 
 
-State 156
+State 157
 
    53 stmt_list_e: stmt_list .
 
     $default  reduce using rule 53 (stmt_list_e)
 
 
-State 157
+State 158
 
    40 other_stmt: expr_10 . SEMICOLON
    97 expr_list: expr_10 . COMMA expr_list
    98          | expr_10 .  [CLOSE_CURLY]
 
-    SEMICOLON  shift, and go to state 160
-    COMMA      shift, and go to state 98
+    SEMICOLON  shift, and go to state 161
+    COMMA      shift, and go to state 99
 
     $default  reduce using rule 98 (expr_list)
 
 
-State 158
+State 159
 
    55 stmt_list: stmt stmt_list .
 
     $default  reduce using rule 55 (stmt_list)
 
 
-State 159
+State 160
 
    10 decl_func: IDENTIFIER COLON FUNCTION type_func EQUALS OPEN_CURLY stmt_list CLOSE_CURLY .
 
     $default  reduce using rule 10 (decl_func)
 
 
-State 160
+State 161
 
    40 other_stmt: expr_10 SEMICOLON .
 
     $default  reduce using rule 40 (other_stmt)
 
 
-State 161
+State 162
 
    58 expr_10: expr_9 QUESTION expr_10 COLON expr_10 .
 
     $default  reduce using rule 58 (expr_10)
 
 
-State 162
+State 163
 
    93 bracket_set: OPEN_SQUARE expr_10 CLOSE_SQUARE bracket_set .
 
     $default  reduce using rule 93 (bracket_set)
 
 
-State 163
+State 164
 
    28 type_param: ARRAY OPEN_SQUARE . CLOSE_SQUARE type_param
 
-    CLOSE_SQUARE  shift, and go to state 172
+    CLOSE_SQUARE  shift, and go to state 173
 
 
-State 164
+State 165
 
    20 param_list: . IDENTIFIER COLON type_param COMMA param_list
    20           | IDENTIFIER COLON type_param COMMA . param_list
@@ -3811,64 +3822,64 @@ State 164
 
     IDENTIFIER  shift, and go to state 92
 
-    param_list  go to state 173
-
-
-State 165
-
-   46 matched_if_stmt: FOR OPEN_PAREN expr_or_e . SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN matched_if_stmt
-   50 open_if_stmt: FOR OPEN_PAREN expr_or_e . SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN open_if_stmt
-
-    SEMICOLON  shift, and go to state 174
+    param_list  go to state 174
 
 
 State 166
 
-   42 condition: OPEN_PAREN expr_10 . CLOSE_PAREN
+   46 matched_if_stmt: FOR OPEN_PAREN expr_or_e . SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN matched_if_stmt
+   50 open_if_stmt: FOR OPEN_PAREN expr_or_e . SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN open_if_stmt
 
-    CLOSE_PAREN  shift, and go to state 175
+    SEMICOLON  shift, and go to state 175
 
 
 State 167
+
+   42 condition: OPEN_PAREN expr_10 . CLOSE_PAREN
+
+    CLOSE_PAREN  shift, and go to state 176
+
+
+State 168
 
    48 open_if_stmt: IF condition if_stmt .
 
     $default  reduce using rule 48 (open_if_stmt)
 
 
-State 168
+State 169
 
    43 if_stmt: matched_if_stmt .  [FOR, IF, PRINT, RETURN, INTEGER_LITERAL, BOOLEAN_LITERAL, CHAR_LITERAL, STRING_LITERAL, IDENTIFIER, OPEN_PAREN, OPEN_CURLY, CLOSE_CURLY, MINUS, NOT]
    45 matched_if_stmt: IF condition matched_if_stmt . ELSE matched_if_stmt
    49 open_if_stmt: IF condition matched_if_stmt . ELSE open_if_stmt
 
-    ELSE  shift, and go to state 176
+    ELSE  shift, and go to state 177
 
     $default  reduce using rule 43 (if_stmt)
 
 
-State 169
+State 170
 
    38 other_stmt: PRINT expr_list_e SEMICOLON .
 
     $default  reduce using rule 38 (other_stmt)
 
 
-State 170
+State 171
 
    37 other_stmt: RETURN expr_or_e SEMICOLON .
 
     $default  reduce using rule 37 (other_stmt)
 
 
-State 171
+State 172
 
    39 other_stmt: OPEN_CURLY stmt_list_e CLOSE_CURLY .
 
     $default  reduce using rule 39 (other_stmt)
 
 
-State 172
+State 173
 
    22 type_param: . INTEGER
    23           | . BOOLEAN
@@ -3879,25 +3890,25 @@ State 172
    28           | . ARRAY OPEN_SQUARE CLOSE_SQUARE type_param
    28           | ARRAY OPEN_SQUARE CLOSE_SQUARE . type_param
 
-    ARRAY     shift, and go to state 140
-    AUTO      shift, and go to state 141
-    BOOLEAN   shift, and go to state 142
-    CHAR      shift, and go to state 143
-    FUNCTION  shift, and go to state 144
-    INTEGER   shift, and go to state 145
-    STRING    shift, and go to state 146
+    ARRAY     shift, and go to state 141
+    AUTO      shift, and go to state 142
+    BOOLEAN   shift, and go to state 143
+    CHAR      shift, and go to state 144
+    FUNCTION  shift, and go to state 145
+    INTEGER   shift, and go to state 146
+    STRING    shift, and go to state 147
 
-    type_param  go to state 177
+    type_param  go to state 178
 
 
-State 173
+State 174
 
    20 param_list: IDENTIFIER COLON type_param COMMA param_list .
 
     $default  reduce using rule 20 (param_list)
 
 
-State 174
+State 175
 
    46 matched_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON . expr_or_e SEMICOLON expr_or_e CLOSE_PAREN matched_if_stmt
    50 open_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON . expr_or_e SEMICOLON expr_or_e CLOSE_PAREN open_if_stmt
@@ -3958,8 +3969,8 @@ State 174
 
     $default  reduce using rule 52 (expr_or_e)
 
-    expr_or_e        go to state 178
-    expr_10          go to state 153
+    expr_or_e        go to state 179
+    expr_10          go to state 154
     expr_9           go to state 40
     expr_8           go to state 41
     expr_7           go to state 42
@@ -3975,14 +3986,14 @@ State 174
     atomic           go to state 52
 
 
-State 175
+State 176
 
    42 condition: OPEN_PAREN expr_10 CLOSE_PAREN .
 
     $default  reduce using rule 42 (condition)
 
 
-State 176
+State 177
 
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
@@ -4042,25 +4053,25 @@ State 176
   103       | . ident_name
   104       | . OPEN_CURLY expr_list CLOSE_CURLY
 
-    FOR              shift, and go to state 122
-    IF               shift, and go to state 123
-    PRINT            shift, and go to state 124
-    RETURN           shift, and go to state 125
+    FOR              shift, and go to state 123
+    IF               shift, and go to state 124
+    PRINT            shift, and go to state 125
+    RETURN           shift, and go to state 126
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
     CHAR_LITERAL     shift, and go to state 31
     STRING_LITERAL   shift, and go to state 32
-    IDENTIFIER       shift, and go to state 126
+    IDENTIFIER       shift, and go to state 127
     OPEN_PAREN       shift, and go to state 34
-    OPEN_CURLY       shift, and go to state 127
+    OPEN_CURLY       shift, and go to state 128
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    decl_var         go to state 128
-    other_stmt       go to state 130
-    matched_if_stmt  go to state 179
-    open_if_stmt     go to state 180
-    expr_10          go to state 135
+    decl_var         go to state 129
+    other_stmt       go to state 131
+    matched_if_stmt  go to state 180
+    open_if_stmt     go to state 181
+    expr_10          go to state 136
     expr_9           go to state 40
     expr_8           go to state 41
     expr_7           go to state 42
@@ -4076,36 +4087,36 @@ State 176
     atomic           go to state 52
 
 
-State 177
+State 178
 
    28 type_param: ARRAY OPEN_SQUARE CLOSE_SQUARE type_param .
 
     $default  reduce using rule 28 (type_param)
 
 
-State 178
+State 179
 
    46 matched_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON expr_or_e . SEMICOLON expr_or_e CLOSE_PAREN matched_if_stmt
    50 open_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON expr_or_e . SEMICOLON expr_or_e CLOSE_PAREN open_if_stmt
 
-    SEMICOLON  shift, and go to state 181
+    SEMICOLON  shift, and go to state 182
 
 
-State 179
+State 180
 
    45 matched_if_stmt: IF condition matched_if_stmt ELSE matched_if_stmt .
 
     $default  reduce using rule 45 (matched_if_stmt)
 
 
-State 180
+State 181
 
    49 open_if_stmt: IF condition matched_if_stmt ELSE open_if_stmt .
 
     $default  reduce using rule 49 (open_if_stmt)
 
 
-State 181
+State 182
 
    46 matched_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON expr_or_e SEMICOLON . expr_or_e CLOSE_PAREN matched_if_stmt
    50 open_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON expr_or_e SEMICOLON . expr_or_e CLOSE_PAREN open_if_stmt
@@ -4166,8 +4177,8 @@ State 181
 
     $default  reduce using rule 52 (expr_or_e)
 
-    expr_or_e        go to state 182
-    expr_10          go to state 153
+    expr_or_e        go to state 183
+    expr_10          go to state 154
     expr_9           go to state 40
     expr_8           go to state 41
     expr_7           go to state 42
@@ -4183,15 +4194,15 @@ State 181
     atomic           go to state 52
 
 
-State 182
+State 183
 
    46 matched_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON expr_or_e SEMICOLON expr_or_e . CLOSE_PAREN matched_if_stmt
    50 open_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON expr_or_e SEMICOLON expr_or_e . CLOSE_PAREN open_if_stmt
 
-    CLOSE_PAREN  shift, and go to state 183
+    CLOSE_PAREN  shift, and go to state 184
 
 
-State 183
+State 184
 
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
@@ -4251,25 +4262,25 @@ State 183
   103       | . ident_name
   104       | . OPEN_CURLY expr_list CLOSE_CURLY
 
-    FOR              shift, and go to state 122
-    IF               shift, and go to state 123
-    PRINT            shift, and go to state 124
-    RETURN           shift, and go to state 125
+    FOR              shift, and go to state 123
+    IF               shift, and go to state 124
+    PRINT            shift, and go to state 125
+    RETURN           shift, and go to state 126
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
     CHAR_LITERAL     shift, and go to state 31
     STRING_LITERAL   shift, and go to state 32
-    IDENTIFIER       shift, and go to state 126
+    IDENTIFIER       shift, and go to state 127
     OPEN_PAREN       shift, and go to state 34
-    OPEN_CURLY       shift, and go to state 127
+    OPEN_CURLY       shift, and go to state 128
     MINUS            shift, and go to state 37
     NOT              shift, and go to state 38
 
-    decl_var         go to state 128
-    other_stmt       go to state 130
-    matched_if_stmt  go to state 184
-    open_if_stmt     go to state 185
-    expr_10          go to state 135
+    decl_var         go to state 129
+    other_stmt       go to state 131
+    matched_if_stmt  go to state 185
+    open_if_stmt     go to state 186
+    expr_10          go to state 136
     expr_9           go to state 40
     expr_8           go to state 41
     expr_7           go to state 42
@@ -4285,14 +4296,14 @@ State 183
     atomic           go to state 52
 
 
-State 184
+State 185
 
    46 matched_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN matched_if_stmt .
 
     $default  reduce using rule 46 (matched_if_stmt)
 
 
-State 185
+State 186
 
    50 open_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN open_if_stmt .
 
