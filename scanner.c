@@ -1107,16 +1107,14 @@ YY_RULE_SETUP
 #line 76 "scanner.flex"
 { return TOKEN_ERROR; }
 	YY_BREAK
-case YY_STATE_EOF(INITIAL):
-#line 78 "scanner.flex"
-{ return TOKEN_EOF; }
-	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 80 "scanner.flex"
+#line 78 "scanner.flex"
 ECHO;
 	YY_BREAK
-#line 1120 "scanner.c"
+#line 1116 "scanner.c"
+case YY_STATE_EOF(INITIAL):
+	yyterminate();
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2115,7 +2113,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 80 "scanner.flex"
+#line 78 "scanner.flex"
 
 
 int yywrap() { return 1; }
