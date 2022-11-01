@@ -7,6 +7,9 @@ test-printer: bminor
 test-parser: bminor
 	./tests/parser_tests/run_tests.sh
 
+test-scanner: bminor
+	./tests/scanner_tests/run_tests.sh
+
 main.o: main.c tokens.h
 	gcc -c -o $@ main.c -g
 

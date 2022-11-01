@@ -75,5 +75,7 @@ while        { return WHILE; }
 
 .            { return TOKEN_ERROR; }
 
+<<EOF>> { return TOKEN_EOF; }
+
 %%
 int yywrap() { return 1; }

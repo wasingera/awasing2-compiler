@@ -1,8 +1,11 @@
 #!/bin/sh
 
-for testfile in good*.bminor
+bminor=./bminor
+path=./tests/scanner_tests
+
+for testfile in $path/good*.bminor
 do
-	if ../bminor -scan $testfile > $testfile.out
+	if $bminor -scan $testfile > $testfile.out
 	then
 		echo "$testfile success (as expected)"
 	else
@@ -10,9 +13,9 @@ do
 	fi
 done
 
-for testfile in bad*.bminor
+for testfile in $path/bad*.bminor
 do
-	if ../bminor -scan $testfile > $testfile.out
+	if $bminor -scan $testfile > $testfile.out
 	then
 		echo "$testfile success (INCORRECT)"
 	else
