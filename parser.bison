@@ -146,8 +146,16 @@ type_var: INTEGER { $$ = type_create(TYPE_INTEGER, NULL, NULL); }
         /* | ARRAY OPEN_SQUARE CLOSE_SQUARE type_var { $$ = type_create_array(NULL, $4); } */
         ;
 
-type_var_undefined_array: ARRAY OPEN_SQUARE CLOSE_SQUARE type_var { $$ = type_create_array(NULL, $4); }
-                      ;
+type_var_undefined_array: INTEGER { $$ = type_create(TYPE_INTEGER, NULL, NULL); }
+                        | BOOLEAN { $$ = type_create(TYPE_BOOLEAN, NULL, NULL); }
+                        | CHAR { $$ = type_create(TYPE_CHAR, NULL, NULL); }
+                        | STRING { $$ = type_create(TYPE_STRING, NULL, NULL); }
+                        | AUTO { $$ = type_create(TYPE_AUTO, NULL, NULL); }
+                        | ARRAY OPEN_SQUARE expr_10 CLOSE_SQUARE type_var_undefined_array { $$ = type_create_array($3, $5); }
+                        | ARRAY OPEN_SQUARE CLOSE_SQUARE type_var_undefined_array { $$ = type_create_array(NULL, $4); }
+                        ;
+/* type_var_undefined_array: ARRAY OPEN_SQUARE CLOSE_SQUARE type_var { $$ = type_create_array(NULL, $4); } */
+/*                       ; */
 
 stmt: if_stmt { $$ = $1; }
 
