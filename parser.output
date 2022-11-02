@@ -22,7 +22,7 @@ Grammar
 
     7 decl_var: IDENTIFIER COLON type_var SEMICOLON
     8         | IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
-    9         | IDENTIFIER COLON type_var_defined_array EQUALS expr_10 SEMICOLON
+    9         | IDENTIFIER COLON type_var_undefined_array EQUALS expr_10 SEMICOLON
 
    10 decl_func: IDENTIFIER COLON FUNCTION type_func SEMICOLON
    11          | IDENTIFIER COLON FUNCTION type_func EQUALS OPEN_CURLY stmt_list CLOSE_CURLY
@@ -56,7 +56,7 @@ Grammar
    34         | AUTO
    35         | ARRAY OPEN_SQUARE expr_10 CLOSE_SQUARE type_var
 
-   36 type_var_defined_array: ARRAY OPEN_SQUARE CLOSE_SQUARE type_var
+   36 type_var_undefined_array: ARRAY OPEN_SQUARE CLOSE_SQUARE type_var
 
    37 stmt: if_stmt
 
@@ -234,7 +234,7 @@ type_param (63)
     on left: 23 24 25 26 27 28 29, on right: 21 22 29
 type_var (64)
     on left: 30 31 32 33 34 35, on right: 7 8 35 36
-type_var_defined_array (65)
+type_var_undefined_array (65)
     on left: 36, on right: 9
 stmt (66)
     on left: 37, on right: 56 57
@@ -302,7 +302,7 @@ State 0
     6          | . decl_func
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
-    9         | . IDENTIFIER COLON type_var_defined_array EQUALS expr_10 SEMICOLON
+    9         | . IDENTIFIER COLON type_var_undefined_array EQUALS expr_10 SEMICOLON
    10 decl_func: . IDENTIFIER COLON FUNCTION type_func SEMICOLON
    11          | . IDENTIFIER COLON FUNCTION type_func EQUALS OPEN_CURLY stmt_list CLOSE_CURLY
 
@@ -320,7 +320,7 @@ State 1
 
     7 decl_var: IDENTIFIER . COLON type_var SEMICOLON
     8         | IDENTIFIER . COLON type_var EQUALS expr_10 SEMICOLON
-    9         | IDENTIFIER . COLON type_var_defined_array EQUALS expr_10 SEMICOLON
+    9         | IDENTIFIER . COLON type_var_undefined_array EQUALS expr_10 SEMICOLON
    10 decl_func: IDENTIFIER . COLON FUNCTION type_func SEMICOLON
    11          | IDENTIFIER . COLON FUNCTION type_func EQUALS OPEN_CURLY stmt_list CLOSE_CURLY
 
@@ -351,7 +351,7 @@ State 4
     6          | . decl_func
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
-    9         | . IDENTIFIER COLON type_var_defined_array EQUALS expr_10 SEMICOLON
+    9         | . IDENTIFIER COLON type_var_undefined_array EQUALS expr_10 SEMICOLON
    10 decl_func: . IDENTIFIER COLON FUNCTION type_func SEMICOLON
    11          | . IDENTIFIER COLON FUNCTION type_func EQUALS OPEN_CURLY stmt_list CLOSE_CURLY
 
@@ -374,7 +374,7 @@ State 5
     6          | decl_func .  [$end]
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
-    9         | . IDENTIFIER COLON type_var_defined_array EQUALS expr_10 SEMICOLON
+    9         | . IDENTIFIER COLON type_var_undefined_array EQUALS expr_10 SEMICOLON
    10 decl_func: . IDENTIFIER COLON FUNCTION type_func SEMICOLON
    11          | . IDENTIFIER COLON FUNCTION type_func EQUALS OPEN_CURLY stmt_list CLOSE_CURLY
 
@@ -391,7 +391,7 @@ State 6
 
     7 decl_var: IDENTIFIER COLON . type_var SEMICOLON
     8         | IDENTIFIER COLON . type_var EQUALS expr_10 SEMICOLON
-    9         | IDENTIFIER COLON . type_var_defined_array EQUALS expr_10 SEMICOLON
+    9         | IDENTIFIER COLON . type_var_undefined_array EQUALS expr_10 SEMICOLON
    10 decl_func: IDENTIFIER COLON . FUNCTION type_func SEMICOLON
    11          | IDENTIFIER COLON . FUNCTION type_func EQUALS OPEN_CURLY stmt_list CLOSE_CURLY
    30 type_var: . INTEGER
@@ -400,7 +400,7 @@ State 6
    33         | . STRING
    34         | . AUTO
    35         | . ARRAY OPEN_SQUARE expr_10 CLOSE_SQUARE type_var
-   36 type_var_defined_array: . ARRAY OPEN_SQUARE CLOSE_SQUARE type_var
+   36 type_var_undefined_array: . ARRAY OPEN_SQUARE CLOSE_SQUARE type_var
 
     ARRAY     shift, and go to state 10
     AUTO      shift, and go to state 11
@@ -410,8 +410,8 @@ State 6
     INTEGER   shift, and go to state 15
     STRING    shift, and go to state 16
 
-    type_var                go to state 17
-    type_var_defined_array  go to state 18
+    type_var                  go to state 17
+    type_var_undefined_array  go to state 18
 
 
 State 7
@@ -438,7 +438,7 @@ State 9
 State 10
 
    35 type_var: ARRAY . OPEN_SQUARE expr_10 CLOSE_SQUARE type_var
-   36 type_var_defined_array: ARRAY . OPEN_SQUARE CLOSE_SQUARE type_var
+   36 type_var_undefined_array: ARRAY . OPEN_SQUARE CLOSE_SQUARE type_var
 
     OPEN_SQUARE  shift, and go to state 19
 
@@ -512,7 +512,7 @@ State 17
 
 State 18
 
-    9 decl_var: IDENTIFIER COLON type_var_defined_array . EQUALS expr_10 SEMICOLON
+    9 decl_var: IDENTIFIER COLON type_var_undefined_array . EQUALS expr_10 SEMICOLON
 
     EQUALS  shift, and go to state 30
 
@@ -520,7 +520,7 @@ State 18
 State 19
 
    35 type_var: ARRAY OPEN_SQUARE . expr_10 CLOSE_SQUARE type_var
-   36 type_var_defined_array: ARRAY OPEN_SQUARE . CLOSE_SQUARE type_var
+   36 type_var_undefined_array: ARRAY OPEN_SQUARE . CLOSE_SQUARE type_var
    58 expr_10: . expr_9 EQUALS expr_10
    59        | . expr_9 QUESTION expr_10 COLON expr_10
    60        | . expr_9
@@ -769,7 +769,7 @@ State 29
 
 State 30
 
-    9 decl_var: IDENTIFIER COLON type_var_defined_array EQUALS . expr_10 SEMICOLON
+    9 decl_var: IDENTIFIER COLON type_var_undefined_array EQUALS . expr_10 SEMICOLON
    58 expr_10: . expr_9 EQUALS expr_10
    59        | . expr_9 QUESTION expr_10 COLON expr_10
    60        | . expr_9
@@ -954,7 +954,7 @@ State 37
    33         | . STRING
    34         | . AUTO
    35         | . ARRAY OPEN_SQUARE expr_10 CLOSE_SQUARE type_var
-   36 type_var_defined_array: ARRAY OPEN_SQUARE CLOSE_SQUARE . type_var
+   36 type_var_undefined_array: ARRAY OPEN_SQUARE CLOSE_SQUARE . type_var
 
     ARRAY    shift, and go to state 68
     AUTO     shift, and go to state 11
@@ -1364,7 +1364,7 @@ State 65
 
 State 66
 
-    9 decl_var: IDENTIFIER COLON type_var_defined_array EQUALS expr_10 . SEMICOLON
+    9 decl_var: IDENTIFIER COLON type_var_undefined_array EQUALS expr_10 . SEMICOLON
 
     SEMICOLON  shift, and go to state 102
 
@@ -1385,9 +1385,9 @@ State 68
 
 State 69
 
-   36 type_var_defined_array: ARRAY OPEN_SQUARE CLOSE_SQUARE type_var .
+   36 type_var_undefined_array: ARRAY OPEN_SQUARE CLOSE_SQUARE type_var .
 
-    $default  reduce using rule 36 (type_var_defined_array)
+    $default  reduce using rule 36 (type_var_undefined_array)
 
 
 State 70
@@ -2523,7 +2523,7 @@ State 100
 
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
-    9         | . IDENTIFIER COLON type_var_defined_array EQUALS expr_10 SEMICOLON
+    9         | . IDENTIFIER COLON type_var_undefined_array EQUALS expr_10 SEMICOLON
    11 decl_func: IDENTIFIER COLON FUNCTION type_func EQUALS OPEN_CURLY . stmt_list CLOSE_CURLY
    37 stmt: . if_stmt
    38 other_stmt: . RETURN expr_or_e SEMICOLON
@@ -2630,7 +2630,7 @@ State 101
 
 State 102
 
-    9 decl_var: IDENTIFIER COLON type_var_defined_array EQUALS expr_10 SEMICOLON .
+    9 decl_var: IDENTIFIER COLON type_var_undefined_array EQUALS expr_10 SEMICOLON .
 
     $default  reduce using rule 9 (decl_var)
 
@@ -3208,7 +3208,7 @@ State 133
 
     7 decl_var: IDENTIFIER . COLON type_var SEMICOLON
     8         | IDENTIFIER . COLON type_var EQUALS expr_10 SEMICOLON
-    9         | IDENTIFIER . COLON type_var_defined_array EQUALS expr_10 SEMICOLON
+    9         | IDENTIFIER . COLON type_var_undefined_array EQUALS expr_10 SEMICOLON
    92 ident_name: IDENTIFIER .  [SEMICOLON, QUESTION, EQUALS, GT, GE, LT, LE, EE, NE, AND, OR, INCREMENT, DECREMENT, OPEN_PAREN, OPEN_SQUARE, CLOSE_CURLY, PLUS, MINUS, MULTIPLY, DIVIDE, REMAINDER, EXP, COMMA]
 
     COLON  shift, and go to state 161
@@ -3220,7 +3220,7 @@ State 134
 
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
-    9         | . IDENTIFIER COLON type_var_defined_array EQUALS expr_10 SEMICOLON
+    9         | . IDENTIFIER COLON type_var_undefined_array EQUALS expr_10 SEMICOLON
    37 stmt: . if_stmt
    38 other_stmt: . RETURN expr_or_e SEMICOLON
    39           | . PRINT expr_list_e SEMICOLON
@@ -3338,7 +3338,7 @@ State 136
 
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
-    9         | . IDENTIFIER COLON type_var_defined_array EQUALS expr_10 SEMICOLON
+    9         | . IDENTIFIER COLON type_var_undefined_array EQUALS expr_10 SEMICOLON
    37 stmt: . if_stmt
    38 other_stmt: . RETURN expr_or_e SEMICOLON
    39           | . PRINT expr_list_e SEMICOLON
@@ -3794,7 +3794,7 @@ State 157
 
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
-    9         | . IDENTIFIER COLON type_var_defined_array EQUALS expr_10 SEMICOLON
+    9         | . IDENTIFIER COLON type_var_undefined_array EQUALS expr_10 SEMICOLON
    38 other_stmt: . RETURN expr_or_e SEMICOLON
    39           | . PRINT expr_list_e SEMICOLON
    40           | . OPEN_CURLY stmt_list_e CLOSE_CURLY
@@ -3914,14 +3914,14 @@ State 161
 
     7 decl_var: IDENTIFIER COLON . type_var SEMICOLON
     8         | IDENTIFIER COLON . type_var EQUALS expr_10 SEMICOLON
-    9         | IDENTIFIER COLON . type_var_defined_array EQUALS expr_10 SEMICOLON
+    9         | IDENTIFIER COLON . type_var_undefined_array EQUALS expr_10 SEMICOLON
    30 type_var: . INTEGER
    31         | . BOOLEAN
    32         | . CHAR
    33         | . STRING
    34         | . AUTO
    35         | . ARRAY OPEN_SQUARE expr_10 CLOSE_SQUARE type_var
-   36 type_var_defined_array: . ARRAY OPEN_SQUARE CLOSE_SQUARE type_var
+   36 type_var_undefined_array: . ARRAY OPEN_SQUARE CLOSE_SQUARE type_var
 
     ARRAY    shift, and go to state 10
     AUTO     shift, and go to state 11
@@ -3930,8 +3930,8 @@ State 161
     INTEGER  shift, and go to state 15
     STRING   shift, and go to state 16
 
-    type_var                go to state 17
-    type_var_defined_array  go to state 18
+    type_var                  go to state 17
+    type_var_undefined_array  go to state 18
 
 
 State 162
@@ -4185,7 +4185,7 @@ State 183
 
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
-    9         | . IDENTIFIER COLON type_var_defined_array EQUALS expr_10 SEMICOLON
+    9         | . IDENTIFIER COLON type_var_undefined_array EQUALS expr_10 SEMICOLON
    38 other_stmt: . RETURN expr_or_e SEMICOLON
    39           | . PRINT expr_list_e SEMICOLON
    40           | . OPEN_CURLY stmt_list_e CLOSE_CURLY
@@ -4395,7 +4395,7 @@ State 190
 
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
-    9         | . IDENTIFIER COLON type_var_defined_array EQUALS expr_10 SEMICOLON
+    9         | . IDENTIFIER COLON type_var_undefined_array EQUALS expr_10 SEMICOLON
    38 other_stmt: . RETURN expr_or_e SEMICOLON
    39           | . PRINT expr_list_e SEMICOLON
    40           | . OPEN_CURLY stmt_list_e CLOSE_CURLY
