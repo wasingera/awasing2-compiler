@@ -6,6 +6,8 @@
 #include "stmt.h"
 #include "type.h"
 #include "decl.h"
+#include "scope.h"
+#include "resolve.h"
 
 extern FILE *yyin;
 extern int yylex();
@@ -13,6 +15,7 @@ extern char *yytext;
 extern int yyleng;
 
 extern struct decl* root;
+struct scope* scope_stack = NULL;
 /* extern struct expr* root; */
 
 typedef enum yytokentype token_t;
@@ -22,6 +25,7 @@ int parse(char* fName);
 void print_token(token_t t);
 char* parse_escape_codes();
 int print(char* fName);
+int resolve(char* fName);
 
 int main(int argc, char** argv) {
 
@@ -32,9 +36,44 @@ int main(int argc, char** argv) {
             return parse(argv[i+1]);
         } else if (!strcmp(argv[i], "-print")) {
             return print(argv[i+1]);
+        } else if (!strcmp(argv[i], "-resolve")) {
+            return resolve(argv[i+1]);
         }
 
     }
+
+    return 0;
+}
+
+int open_file(char* fName) {
+    if (!fName) {
+        printf("Need a file to parse!\n");
+        return 0;
+    }
+
+	yyin = fopen(fName,"r");
+	if (!yyin) {
+		printf("could not open %s!\n", fName);
+		return 0;
+	}
+
+    return 1;
+}
+
+int resolve(char* fName) {
+    if (!open_file(fName))
+        return 1;
+
+    if (yyparse() != 0) {
+        printf("Parse failed: %s\n", yytext);
+        return 1;
+    }
+
+    // enter the global scope
+    scope_enter();
+    decl_resolve(root);
+    // leave global scope
+    scope_exit();
 
     return 0;
 }

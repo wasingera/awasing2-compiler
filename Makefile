@@ -1,4 +1,4 @@
-bminor: main.o scanner.o parser.o expr.o stmt.o type.o decl.o param_list.o
+bminor: main.o scanner.o parser.o expr.o stmt.o type.o decl.o param_list.o scope.o hash_table.o symbol.o resolve.o
 	gcc -o $@ $^ -g
 
 test-printer: bminor
@@ -12,6 +12,18 @@ test-scanner: bminor
 
 main.o: main.c tokens.h
 	gcc -c -o $@ main.c -g
+
+hash_table.o: hash_table.c hash_table.h
+	gcc -c -o $@ hash_table.c
+	
+resolve.o: resolve.c resolve.h
+	gcc -c -o $@ resolve.c
+
+symbol.o: symbol.c symbol.h
+	gcc -c -o $@ symbol.c
+
+scope.o: scope.c scope.h
+	gcc -c -o $@ scope.c
 
 decl.o: decl.c decl.h
 	gcc -c -o $@ decl.c

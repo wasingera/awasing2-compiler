@@ -19,7 +19,7 @@ struct decl * decl_create_list(struct decl* curr, struct decl* next) {
 }
 
 struct decl * decl_create_func_body(char* name, struct type* type, struct stmt* code) {
-    struct stmt* list = stmt_create(STMT_LIST, NULL, NULL, NULL, NULL, code, NULL, NULL);
+    struct stmt* list = stmt_create(STMT_LIST, NULL, NULL, NULL, NULL, NULL, NULL, code);
     struct decl* d = decl_create(name, type, NULL, list, NULL);
 
     return d;

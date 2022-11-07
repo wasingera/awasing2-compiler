@@ -129,7 +129,7 @@ void stmt_print_val(struct stmt* s, int indent) {
             printf("\n");
             break;
         case STMT_LIST:
-            stmt_print_list(s->body, indent);
+            stmt_print_list(s->next, indent);
             break;
     }
 }
