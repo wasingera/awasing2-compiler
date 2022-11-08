@@ -85,7 +85,7 @@ struct decl* root;
 
 %type <decl> decl_list decl_var decl_func
 
-%type <type> type_func type_param type_var type_var_undefined_array
+%type <type> type_func type_param type_var /* type_var_undefined_array */
 
 %type <param_list> param_list_e param_list
 
@@ -103,7 +103,7 @@ decl_list: decl_var decl_list { $$ = decl_create_list($1, $2); }
 
 decl_var: IDENTIFIER COLON type_var SEMICOLON { $$ = decl_create($1, $3, NULL, NULL, NULL); }
         | IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON { $$ = decl_create($1, $3, $5, NULL, NULL); }
-        | IDENTIFIER COLON type_var_undefined_array EQUALS expr_10 SEMICOLON { $$ = decl_create($1, $3, $5, NULL, NULL); }
+        /* | IDENTIFIER COLON type_var_undefined_array EQUALS expr_10 SEMICOLON { $$ = decl_create($1, $3, $5, NULL, NULL); } */
         ;
 
 decl_func: IDENTIFIER COLON FUNCTION type_func SEMICOLON { $$ = decl_create($1, $4, NULL, NULL, NULL); }
@@ -146,14 +146,14 @@ type_var: INTEGER { $$ = type_create(TYPE_INTEGER, NULL, NULL); }
         /* | ARRAY OPEN_SQUARE CLOSE_SQUARE type_var { $$ = type_create_array(NULL, $4); } */
         ;
 
-type_var_undefined_array: INTEGER { $$ = type_create(TYPE_INTEGER, NULL, NULL); }
-                        | BOOLEAN { $$ = type_create(TYPE_BOOLEAN, NULL, NULL); }
-                        | CHAR { $$ = type_create(TYPE_CHAR, NULL, NULL); }
-                        | STRING { $$ = type_create(TYPE_STRING, NULL, NULL); }
-                        | AUTO { $$ = type_create(TYPE_AUTO, NULL, NULL); }
-                        | ARRAY OPEN_SQUARE expr_10 CLOSE_SQUARE type_var_undefined_array { $$ = type_create_array($3, $5); }
-                        | ARRAY OPEN_SQUARE CLOSE_SQUARE type_var_undefined_array { $$ = type_create_array(NULL, $4); }
-                        ;
+/* type_var_undefined_array: INTEGER { $$ = type_create(TYPE_INTEGER, NULL, NULL); } */
+/*                         | BOOLEAN { $$ = type_create(TYPE_BOOLEAN, NULL, NULL); } */
+/*                         | CHAR { $$ = type_create(TYPE_CHAR, NULL, NULL); } */
+/*                         | STRING { $$ = type_create(TYPE_STRING, NULL, NULL); } */
+/*                         | AUTO { $$ = type_create(TYPE_AUTO, NULL, NULL); } */
+/*                         | ARRAY OPEN_SQUARE expr_10 CLOSE_SQUARE type_var_undefined_array { $$ = type_create_array($3, $5); } */
+/*                         | ARRAY OPEN_SQUARE CLOSE_SQUARE type_var_undefined_array { $$ = type_create_array(NULL, $4); } */
+/*                         ; */
 /* type_var_undefined_array: ARRAY OPEN_SQUARE CLOSE_SQUARE type_var { $$ = type_create_array(NULL, $4); } */
 /*                       ; */
 

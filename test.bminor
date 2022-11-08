@@ -1,4 +1,2 @@
-f: function array [] integer (y: integer) = {
-    y: char = x[1][x];
-    return y;
-}
+a: integer;
+x: integer = 5 - a;

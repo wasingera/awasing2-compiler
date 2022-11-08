@@ -8,6 +8,7 @@
 #include "decl.h"
 #include "scope.h"
 #include "resolve.h"
+#include "typecheck.h"
 
 extern FILE *yyin;
 extern int yylex();
@@ -26,6 +27,7 @@ void print_token(token_t t);
 char* parse_escape_codes();
 int print(char* fName);
 int resolve(char* fName);
+int typecheck(char* fName);
 
 int main(int argc, char** argv) {
 
@@ -38,6 +40,8 @@ int main(int argc, char** argv) {
             return print(argv[i+1]);
         } else if (!strcmp(argv[i], "-resolve")) {
             return resolve(argv[i+1]);
+        } else if (!strcmp(argv[i], "-typecheck")) {
+            return typecheck(argv[i+1]);
         }
 
     }
@@ -58,6 +62,16 @@ int open_file(char* fName) {
 	}
 
     return 1;
+}
+
+int typecheck(char* fName) {
+    if (resolve(fName) == 1) {
+        return 1;
+    }
+
+    decl_typecheck(root);
+
+    return 0;
 }
 
 int resolve(char* fName) {

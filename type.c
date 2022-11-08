@@ -61,3 +61,28 @@ void type_print(struct type* t) {
             break;
     }
 }
+
+int type_equals(struct type* a, struct type* b) {
+    if (!a && !b) return 1;
+    if (!a || !b) return 0;
+
+    // TODO: param_list_equals
+    if (a->kind == b->kind && type_equals(a->subtype, b->subtype))
+        return 1;
+
+    return 0;
+}
+
+struct type* type_copy(struct type* t) {
+    if (!t) return NULL;
+
+    struct type* new = type_create(t->kind, type_copy(t->subtype), NULL);
+
+    return new;
+}
+
+void type_delete(struct type* t) {
+    if (!t) return;
+
+    return;
+}
