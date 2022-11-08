@@ -6,5 +6,6 @@
 
 struct type* expr_typecheck(struct expr* e);
 void decl_typecheck(struct decl* d);
+void stmt_typecheck(struct stmt* s, struct type* f_type);
 
 #endif

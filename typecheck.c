@@ -75,8 +75,49 @@ void decl_typecheck(struct decl *d) {
     if (d->value)
         expr_typecheck(d->value);
 
-    // if (d->code)
-    //     stmt_typecheck(d->code);
+    if (d->code)
+        stmt_typecheck(d->code, d->type);
 
     decl_typecheck(d->next);
+}
+
+void stmt_typecheck(struct stmt* s, struct type* f_type) {
+    if (!s) return;
+
+    struct type* t;
+    switch (s->kind) {
+        case STMT_DECL:
+            decl_typecheck(s->decl);
+            break;
+        case STMT_EXPR:
+            expr_typecheck(s->expr);
+            break;
+        case STMT_IF_ELSE:
+            t = expr_typecheck(s->expr);
+            if (t->kind != TYPE_BOOLEAN) {
+                printf("type error: can't use "); type_print(t);
+                printf(" ("); expr_print(s->expr, NULL); printf(") as a condition (need boolean)");
+            }
+            stmt_typecheck(s->body, f_type);
+            stmt_typecheck(s->else_body, f_type);
+            break;
+        case STMT_FOR:
+            expr_typecheck(s->init_expr);
+            expr_typecheck(s->expr);
+            expr_typecheck(s->next_expr);
+            break;
+        case STMT_RETURN:
+            t = expr_typecheck(s->expr);
+            if (!type_equals(f_type->subtype, t)) {
+                printf("type error: cannot return a "); type_print(t);
+                printf(" ("); expr_print(s->expr, NULL); printf(") in a function that returns ");
+                type_print(f_type->subtype); printf("\n");
+            }
+            break;
+        case STMT_BLOCK:
+            stmt_typecheck(s->body, f_type);
+            break;
+    }
+
+    stmt_typecheck(s->next, f_type);
 }

@@ -1,1 +1,7 @@
-x: integer = (5 + "a") + 'c';
+a: char;
+
+x: function integer () = {
+    {
+        return a;
+    }
+}
