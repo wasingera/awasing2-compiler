@@ -29,16 +29,41 @@ struct type* expr_typecheck(struct expr* e) {
             result = type_copy(e->symbol->type);
             break;
         case EXPR_ADD:
-            if (lt->kind != TYPE_INTEGER || rt->kind != TYPE_INTEGER)
-                printf("Type error on addition\n");
+            if (lt->kind != TYPE_INTEGER || rt->kind != TYPE_INTEGER) {
+                printf("type error: cannot add a ");
+                type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
+                printf(" to a ");
+                type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(")\n");
+            }
             result = type_create(TYPE_INTEGER, NULL, NULL);
             break;
         case EXPR_SUB:
-            if (lt->kind != TYPE_INTEGER || rt->kind != TYPE_INTEGER)
-                printf("Type error on subtraction\n");
+            if (lt->kind != TYPE_INTEGER || rt->kind != TYPE_INTEGER) {
+                printf("type error: cannot subtract a ");
+                type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
+                printf(" from a ");
+                type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(")\n");
+            }
             result = type_create(TYPE_INTEGER, NULL, NULL);
             break;
-
+        case EXPR_MUL:
+            if (lt->kind != TYPE_INTEGER || rt->kind != TYPE_INTEGER) {
+                printf("type error: cannot multiply a ");
+                type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
+                printf(" and a ");
+                type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(")\n");
+            }
+            result = type_create(TYPE_INTEGER, NULL, NULL);
+            break;
+        case EXPR_DIV:
+            if (lt->kind != TYPE_INTEGER || rt->kind != TYPE_INTEGER) {
+                printf("type error: cannot divide a ");
+                type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
+                printf(" and a ");
+                type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(")\n");
+            }
+            result = type_create(TYPE_INTEGER, NULL, NULL);
+            break;
     }
 
     return result;
@@ -47,8 +72,11 @@ struct type* expr_typecheck(struct expr* e) {
 void decl_typecheck(struct decl *d) {
     if (!d) return;
 
-    if (d->value && !type_equals(d->type, expr_typecheck(d->value)))
-        printf("Type error on declaration\n");
+    if (d->value)
+        expr_typecheck(d->value);
+
+    // if (d->code)
+    //     stmt_typecheck(d->code);
 
     decl_typecheck(d->next);
 }
