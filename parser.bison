@@ -79,7 +79,7 @@ struct decl* root;
 
 %type <str> IDENTIFIER INTEGER_LITERAL STRING_LITERAL CHAR_LITERAL BOOLEAN_LITERAL
 
-%type <expr> expr_10 expr_9 expr_8 expr_7 expr_6 expr_5 expr_4 expr_3 expr_2 expr_1 atomic expr_list expr_list_e func_call ident_name condition expr_or_e array_subscript bracket_set
+%type <expr> expr_10 expr_9 expr_8 expr_7 expr_6 expr_5 expr_4 expr_3 expr_2 expr_1 atomic expr_list expr_list_e func_call ident_name condition expr_or_e array_subscript bracket_set func_args func_args_e
 
 %type <stmt> stmt other_stmt if_stmt matched_if_stmt open_if_stmt stmt_list stmt_list_e
 
@@ -248,7 +248,15 @@ expr_1: OPEN_PAREN expr_10 CLOSE_PAREN { $$ = $2; }
       | atomic { $$ = $1; }
       ;
 
-func_call: ident_name OPEN_PAREN expr_list_e CLOSE_PAREN { $$ = expr_create_func_call($1, $3); }
+func_call: ident_name OPEN_PAREN func_args_e CLOSE_PAREN { $$ = expr_create_func_call($1, $3); }
+         ;
+
+func_args_e: func_args { $$ = $1; }
+           | /* e */ { $$ = NULL; }
+           ;
+
+func_args: expr_10 COMMA func_args  { $$ = expr_create_func_args($1, $3); }
+         | expr_10 { $$ = expr_create_func_args($1, NULL); }
          ;
 
 ident_name: IDENTIFIER { $$ = expr_create_name($1); }

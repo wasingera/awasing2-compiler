@@ -31,6 +31,7 @@ typedef enum {
     EXPR_BOOL_LITERAL,
     EXPR_ARRAY_LITERAL,
     EXPR_FUNC_CALL,
+    EXPR_ARG,
     EXPR_LIST,
     EXPR_ARRAY_SUBSCRIPT,
 
@@ -65,6 +66,7 @@ struct expr * expr_create_char_literal( char c );
 struct expr * expr_create_string_literal( const char *str );
 struct expr* expr_create_array_literal(struct expr* next);
 struct expr * expr_create_func_call(struct expr*  name, struct expr* args);
+struct expr* expr_create_func_args(struct expr* curr, struct expr* next);
 struct expr * expr_create_array_subscript(struct expr* name, struct expr* bracket_set);
 
 int get_expr_rank(struct expr* e);

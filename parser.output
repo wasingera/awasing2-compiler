@@ -128,27 +128,33 @@ Grammar
    87       | array_subscript
    88       | atomic
 
-   89 func_call: ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
+   89 func_call: ident_name OPEN_PAREN func_args_e CLOSE_PAREN
 
-   90 ident_name: IDENTIFIER
+   90 func_args_e: func_args
+   91            | %empty
 
-   91 array_subscript: ident_name bracket_set
+   92 func_args: expr_10 COMMA func_args
+   93          | expr_10
 
-   92 bracket_set: OPEN_SQUARE expr_10 CLOSE_SQUARE bracket_set
-   93            | OPEN_SQUARE expr_10 CLOSE_SQUARE
+   94 ident_name: IDENTIFIER
 
-   94 expr_list_e: expr_list
-   95            | %empty
+   95 array_subscript: ident_name bracket_set
 
-   96 expr_list: expr_10 COMMA expr_list
-   97          | expr_10
+   96 bracket_set: OPEN_SQUARE expr_10 CLOSE_SQUARE bracket_set
+   97            | OPEN_SQUARE expr_10 CLOSE_SQUARE
 
-   98 atomic: INTEGER_LITERAL
-   99       | BOOLEAN_LITERAL
-  100       | CHAR_LITERAL
-  101       | STRING_LITERAL
-  102       | ident_name
-  103       | OPEN_CURLY expr_list CLOSE_CURLY
+   98 expr_list_e: expr_list
+   99            | %empty
+
+  100 expr_list: expr_10 COMMA expr_list
+  101          | expr_10
+
+  102 atomic: INTEGER_LITERAL
+  103       | BOOLEAN_LITERAL
+  104       | CHAR_LITERAL
+  105       | STRING_LITERAL
+  106       | ident_name
+  107       | OPEN_CURLY expr_list CLOSE_CURLY
 
 
 Terminals, with rules where they appear
@@ -172,11 +178,11 @@ STRING (271) 14 25 32
 TRUE (272)
 VOID (273) 15
 WHILE (274)
-INTEGER_LITERAL (275) 98
-BOOLEAN_LITERAL (276) 99
-CHAR_LITERAL (277) 100
-STRING_LITERAL (278) 101
-IDENTIFIER (279) 7 8 9 10 20 21 90
+INTEGER_LITERAL (275) 102
+BOOLEAN_LITERAL (276) 103
+CHAR_LITERAL (277) 104
+STRING_LITERAL (278) 105
+IDENTIFIER (279) 7 8 9 10 20 21 94
 TOKEN_ERROR (280)
 COMMENT (281)
 SEMICOLON (282) 7 8 9 36 37 39 45 49
@@ -195,10 +201,10 @@ INCREMENT (294) 82
 DECREMENT (295) 83
 OPEN_PAREN (296) 18 19 41 45 49 85 89
 CLOSE_PAREN (297) 18 19 41 45 49 85 89
-OPEN_SQUARE (298) 28 34 92 93
-CLOSE_SQUARE (299) 28 34 92 93
-OPEN_CURLY (300) 10 38 103
-CLOSE_CURLY (301) 10 38 103
+OPEN_SQUARE (298) 28 34 96 97
+CLOSE_SQUARE (299) 28 34 96 97
+OPEN_CURLY (300) 10 38 107
+CLOSE_CURLY (301) 10 38 107
 PLUS (302) 70
 MINUS (303) 71 79
 MULTIPLY (304) 73
@@ -206,7 +212,7 @@ DIVIDE (305) 74
 REMAINDER (306) 75
 EXP (307) 77
 NOT (308) 80
-COMMA (309) 20 96
+COMMA (309) 20 92 100
 
 
 Nonterminals, with rules where they appear
@@ -251,6 +257,7 @@ stmt_list (73)
     on left: 54 55, on right: 10 52 54
 expr_10 (74)
     on left: 56 57 58, on right: 8 34 39 41 50 56 57 85 92 93 96 97
+    100 101
 expr_9 (75)
     on left: 59 60, on right: 56 57 58 59
 expr_8 (76)
@@ -271,18 +278,22 @@ expr_1 (83)
     on left: 85 86 87 88, on right: 84
 func_call (84)
     on left: 89, on right: 86
-ident_name (85)
-    on left: 90, on right: 89 91 102
-array_subscript (86)
-    on left: 91, on right: 87
-bracket_set (87)
-    on left: 92 93, on right: 91 92
-expr_list_e (88)
-    on left: 94 95, on right: 37 89
-expr_list (89)
-    on left: 96 97, on right: 94 96 103
-atomic (90)
-    on left: 98 99 100 101 102 103, on right: 88
+func_args_e (85)
+    on left: 90 91, on right: 89
+func_args (86)
+    on left: 92 93, on right: 90 92
+ident_name (87)
+    on left: 94, on right: 89 95 106
+array_subscript (88)
+    on left: 95, on right: 87
+bracket_set (89)
+    on left: 96 97, on right: 95 96
+expr_list_e (90)
+    on left: 98 99, on right: 37
+expr_list (91)
+    on left: 100 101, on right: 98 100 107
+atomic (92)
+    on left: 102 103 104 105 106 107, on right: 88
 
 
 State 0
@@ -532,15 +543,15 @@ State 18
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -708,15 +719,15 @@ State 28
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -746,37 +757,37 @@ State 28
 
 State 29
 
-   98 atomic: INTEGER_LITERAL .
+  102 atomic: INTEGER_LITERAL .
 
-    $default  reduce using rule 98 (atomic)
+    $default  reduce using rule 102 (atomic)
 
 
 State 30
 
-   99 atomic: BOOLEAN_LITERAL .
+  103 atomic: BOOLEAN_LITERAL .
 
-    $default  reduce using rule 99 (atomic)
+    $default  reduce using rule 103 (atomic)
 
 
 State 31
 
-  100 atomic: CHAR_LITERAL .
+  104 atomic: CHAR_LITERAL .
 
-    $default  reduce using rule 100 (atomic)
+    $default  reduce using rule 104 (atomic)
 
 
 State 32
 
-  101 atomic: STRING_LITERAL .
+  105 atomic: STRING_LITERAL .
 
-    $default  reduce using rule 101 (atomic)
+    $default  reduce using rule 105 (atomic)
 
 
 State 33
 
-   90 ident_name: IDENTIFIER .
+   94 ident_name: IDENTIFIER .
 
-    $default  reduce using rule 90 (ident_name)
+    $default  reduce using rule 94 (ident_name)
 
 
 State 34
@@ -815,15 +826,15 @@ State 34
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -886,18 +897,18 @@ State 35
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   96 expr_list: . expr_10 COMMA expr_list
-   97          | . expr_10
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
-  103       | OPEN_CURLY . expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  100 expr_list: . expr_10 COMMA expr_list
+  101          | . expr_10
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
+  107       | OPEN_CURLY . expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -939,15 +950,15 @@ State 36
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -981,15 +992,15 @@ State 37
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -1132,16 +1143,16 @@ State 48
 
 State 49
 
-   89 func_call: ident_name . OPEN_PAREN expr_list_e CLOSE_PAREN
-   91 array_subscript: ident_name . bracket_set
-   92 bracket_set: . OPEN_SQUARE expr_10 CLOSE_SQUARE bracket_set
-   93            | . OPEN_SQUARE expr_10 CLOSE_SQUARE
-  102 atomic: ident_name .  [SEMICOLON, COLON, QUESTION, EQUALS, GT, GE, LT, LE, EE, NE, AND, OR, INCREMENT, DECREMENT, CLOSE_PAREN, CLOSE_SQUARE, CLOSE_CURLY, PLUS, MINUS, MULTIPLY, DIVIDE, REMAINDER, EXP, COMMA]
+   89 func_call: ident_name . OPEN_PAREN func_args_e CLOSE_PAREN
+   95 array_subscript: ident_name . bracket_set
+   96 bracket_set: . OPEN_SQUARE expr_10 CLOSE_SQUARE bracket_set
+   97            | . OPEN_SQUARE expr_10 CLOSE_SQUARE
+  106 atomic: ident_name .  [SEMICOLON, COLON, QUESTION, EQUALS, GT, GE, LT, LE, EE, NE, AND, OR, INCREMENT, DECREMENT, CLOSE_PAREN, CLOSE_SQUARE, CLOSE_CURLY, PLUS, MINUS, MULTIPLY, DIVIDE, REMAINDER, EXP, COMMA]
 
     OPEN_PAREN   shift, and go to state 87
     OPEN_SQUARE  shift, and go to state 88
 
-    $default  reduce using rule 102 (atomic)
+    $default  reduce using rule 106 (atomic)
 
     bracket_set  go to state 89
 
@@ -1256,17 +1267,17 @@ State 63
 
 State 64
 
-   96 expr_list: expr_10 . COMMA expr_list
-   97          | expr_10 .  [SEMICOLON, CLOSE_PAREN, CLOSE_CURLY]
+  100 expr_list: expr_10 . COMMA expr_list
+  101          | expr_10 .  [SEMICOLON, CLOSE_CURLY]
 
     COMMA  shift, and go to state 97
 
-    $default  reduce using rule 97 (expr_list)
+    $default  reduce using rule 101 (expr_list)
 
 
 State 65
 
-  103 atomic: OPEN_CURLY expr_list . CLOSE_CURLY
+  107 atomic: OPEN_CURLY expr_list . CLOSE_CURLY
 
     CLOSE_CURLY  shift, and go to state 98
 
@@ -1341,15 +1352,15 @@ State 69
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -1413,15 +1424,15 @@ State 70
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -1480,15 +1491,15 @@ State 71
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -1543,15 +1554,15 @@ State 72
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -1598,15 +1609,15 @@ State 73
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -1652,15 +1663,15 @@ State 74
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -1706,15 +1717,15 @@ State 75
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -1760,15 +1771,15 @@ State 76
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -1814,15 +1825,15 @@ State 77
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -1868,15 +1879,15 @@ State 78
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -1919,15 +1930,15 @@ State 79
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -1969,15 +1980,15 @@ State 80
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -2015,15 +2026,15 @@ State 81
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -2060,15 +2071,15 @@ State 82
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -2105,15 +2116,15 @@ State 83
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -2150,15 +2161,15 @@ State 84
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -2229,20 +2240,20 @@ State 87
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   89          | ident_name OPEN_PAREN . expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   94 expr_list_e: . expr_list
-   95            | . %empty  [CLOSE_PAREN]
-   96 expr_list: . expr_10 COMMA expr_list
-   97          | . expr_10
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   89          | ident_name OPEN_PAREN . func_args_e CLOSE_PAREN
+   90 func_args_e: . func_args
+   91            | . %empty  [CLOSE_PAREN]
+   92 func_args: . expr_10 COMMA func_args
+   93          | . expr_10
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -2254,9 +2265,9 @@ State 87
     MINUS            shift, and go to state 36
     NOT              shift, and go to state 37
 
-    $default  reduce using rule 95 (expr_list_e)
+    $default  reduce using rule 91 (func_args_e)
 
-    expr_10          go to state 64
+    expr_10          go to state 116
     expr_9           go to state 39
     expr_8           go to state 40
     expr_7           go to state 41
@@ -2267,10 +2278,10 @@ State 87
     expr_2           go to state 46
     expr_1           go to state 47
     func_call        go to state 48
+    func_args_e      go to state 117
+    func_args        go to state 118
     ident_name       go to state 49
     array_subscript  go to state 50
-    expr_list_e      go to state 116
-    expr_list        go to state 117
     atomic           go to state 51
 
 
@@ -2309,17 +2320,17 @@ State 88
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   92 bracket_set: OPEN_SQUARE . expr_10 CLOSE_SQUARE bracket_set
-   93            | OPEN_SQUARE . expr_10 CLOSE_SQUARE
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+   96 bracket_set: OPEN_SQUARE . expr_10 CLOSE_SQUARE bracket_set
+   97            | OPEN_SQUARE . expr_10 CLOSE_SQUARE
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -2331,7 +2342,7 @@ State 88
     MINUS            shift, and go to state 36
     NOT              shift, and go to state 37
 
-    expr_10          go to state 118
+    expr_10          go to state 119
     expr_9           go to state 39
     expr_8           go to state 40
     expr_7           go to state 41
@@ -2349,9 +2360,9 @@ State 88
 
 State 89
 
-   91 array_subscript: ident_name bracket_set .
+   95 array_subscript: ident_name bracket_set .
 
-    $default  reduce using rule 91 (array_subscript)
+    $default  reduce using rule 95 (array_subscript)
 
 
 State 90
@@ -2359,7 +2370,7 @@ State 90
    20 param_list: IDENTIFIER . COLON type_param COMMA param_list
    21           | IDENTIFIER . COLON type_param
 
-    COLON  shift, and go to state 119
+    COLON  shift, and go to state 120
 
 
 State 91
@@ -2373,7 +2384,7 @@ State 92
 
    18 param_list_e: OPEN_PAREN param_list . CLOSE_PAREN
 
-    CLOSE_PAREN  shift, and go to state 120
+    CLOSE_PAREN  shift, and go to state 121
 
 
 State 93
@@ -2437,38 +2448,38 @@ State 94
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
-    FOR              shift, and go to state 121
-    IF               shift, and go to state 122
-    PRINT            shift, and go to state 123
-    RETURN           shift, and go to state 124
+    FOR              shift, and go to state 122
+    IF               shift, and go to state 123
+    PRINT            shift, and go to state 124
+    RETURN           shift, and go to state 125
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
     CHAR_LITERAL     shift, and go to state 31
     STRING_LITERAL   shift, and go to state 32
-    IDENTIFIER       shift, and go to state 125
+    IDENTIFIER       shift, and go to state 126
     OPEN_PAREN       shift, and go to state 34
-    OPEN_CURLY       shift, and go to state 126
+    OPEN_CURLY       shift, and go to state 127
     MINUS            shift, and go to state 36
     NOT              shift, and go to state 37
 
-    decl_var         go to state 127
-    stmt             go to state 128
-    other_stmt       go to state 129
-    if_stmt          go to state 130
-    matched_if_stmt  go to state 131
-    open_if_stmt     go to state 132
-    stmt_list        go to state 133
-    expr_10          go to state 134
+    decl_var         go to state 128
+    stmt             go to state 129
+    other_stmt       go to state 130
+    if_stmt          go to state 131
+    matched_if_stmt  go to state 132
+    open_if_stmt     go to state 133
+    stmt_list        go to state 134
+    expr_10          go to state 135
     expr_9           go to state 39
     expr_8           go to state 40
     expr_7           go to state 41
@@ -2533,18 +2544,18 @@ State 97
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   96 expr_list: . expr_10 COMMA expr_list
-   96          | expr_10 COMMA . expr_list
-   97          | . expr_10
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  100 expr_list: . expr_10 COMMA expr_list
+  100          | expr_10 COMMA . expr_list
+  101          | . expr_10
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -2569,15 +2580,15 @@ State 97
     func_call        go to state 48
     ident_name       go to state 49
     array_subscript  go to state 50
-    expr_list        go to state 135
+    expr_list        go to state 136
     atomic           go to state 51
 
 
 State 98
 
-  103 atomic: OPEN_CURLY expr_list CLOSE_CURLY .
+  107 atomic: OPEN_CURLY expr_list CLOSE_CURLY .
 
-    $default  reduce using rule 103 (atomic)
+    $default  reduce using rule 107 (atomic)
 
 
 State 99
@@ -2591,7 +2602,7 @@ State 100
 
    57 expr_10: expr_9 QUESTION expr_10 . COLON expr_10
 
-    COLON  shift, and go to state 136
+    COLON  shift, and go to state 137
 
 
 State 101
@@ -2761,27 +2772,37 @@ State 115
 
 State 116
 
-   89 func_call: ident_name OPEN_PAREN expr_list_e . CLOSE_PAREN
+   92 func_args: expr_10 . COMMA func_args
+   93          | expr_10 .  [CLOSE_PAREN]
 
-    CLOSE_PAREN  shift, and go to state 137
+    COMMA  shift, and go to state 138
+
+    $default  reduce using rule 93 (func_args)
 
 
 State 117
 
-   94 expr_list_e: expr_list .
+   89 func_call: ident_name OPEN_PAREN func_args_e . CLOSE_PAREN
 
-    $default  reduce using rule 94 (expr_list_e)
+    CLOSE_PAREN  shift, and go to state 139
 
 
 State 118
 
-   92 bracket_set: OPEN_SQUARE expr_10 . CLOSE_SQUARE bracket_set
-   93            | OPEN_SQUARE expr_10 . CLOSE_SQUARE
+   90 func_args_e: func_args .
 
-    CLOSE_SQUARE  shift, and go to state 138
+    $default  reduce using rule 90 (func_args_e)
 
 
 State 119
+
+   96 bracket_set: OPEN_SQUARE expr_10 . CLOSE_SQUARE bracket_set
+   97            | OPEN_SQUARE expr_10 . CLOSE_SQUARE
+
+    CLOSE_SQUARE  shift, and go to state 140
+
+
+State 120
 
    20 param_list: IDENTIFIER COLON . type_param COMMA param_list
    21           | IDENTIFIER COLON . type_param
@@ -2793,45 +2814,45 @@ State 119
    27           | . FUNCTION
    28           | . ARRAY OPEN_SQUARE CLOSE_SQUARE type_param
 
-    ARRAY     shift, and go to state 139
-    AUTO      shift, and go to state 140
-    BOOLEAN   shift, and go to state 141
-    CHAR      shift, and go to state 142
-    FUNCTION  shift, and go to state 143
-    INTEGER   shift, and go to state 144
-    STRING    shift, and go to state 145
+    ARRAY     shift, and go to state 141
+    AUTO      shift, and go to state 142
+    BOOLEAN   shift, and go to state 143
+    CHAR      shift, and go to state 144
+    FUNCTION  shift, and go to state 145
+    INTEGER   shift, and go to state 146
+    STRING    shift, and go to state 147
 
-    type_param  go to state 146
+    type_param  go to state 148
 
 
-State 120
+State 121
 
    18 param_list_e: OPEN_PAREN param_list CLOSE_PAREN .
 
     $default  reduce using rule 18 (param_list_e)
 
 
-State 121
+State 122
 
    45 matched_if_stmt: FOR . OPEN_PAREN expr_or_e SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN matched_if_stmt
    49 open_if_stmt: FOR . OPEN_PAREN expr_or_e SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN open_if_stmt
 
-    OPEN_PAREN  shift, and go to state 147
+    OPEN_PAREN  shift, and go to state 149
 
 
-State 122
+State 123
 
    41 condition: . OPEN_PAREN expr_10 CLOSE_PAREN
    44 matched_if_stmt: IF . condition matched_if_stmt ELSE matched_if_stmt
    47 open_if_stmt: IF . condition if_stmt
    48             | IF . condition matched_if_stmt ELSE open_if_stmt
 
-    OPEN_PAREN  shift, and go to state 148
+    OPEN_PAREN  shift, and go to state 150
 
-    condition  go to state 149
+    condition  go to state 151
 
 
-State 123
+State 124
 
    37 other_stmt: PRINT . expr_list_e SEMICOLON
    56 expr_10: . expr_9 EQUALS expr_10
@@ -2867,19 +2888,19 @@ State 123
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   94 expr_list_e: . expr_list
-   95            | . %empty  [SEMICOLON]
-   96 expr_list: . expr_10 COMMA expr_list
-   97          | . expr_10
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+   98 expr_list_e: . expr_list
+   99            | . %empty  [SEMICOLON]
+  100 expr_list: . expr_10 COMMA expr_list
+  101          | . expr_10
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -2891,7 +2912,7 @@ State 123
     MINUS            shift, and go to state 36
     NOT              shift, and go to state 37
 
-    $default  reduce using rule 95 (expr_list_e)
+    $default  reduce using rule 99 (expr_list_e)
 
     expr_10          go to state 64
     expr_9           go to state 39
@@ -2906,12 +2927,12 @@ State 123
     func_call        go to state 48
     ident_name       go to state 49
     array_subscript  go to state 50
-    expr_list_e      go to state 150
-    expr_list        go to state 117
+    expr_list_e      go to state 152
+    expr_list        go to state 153
     atomic           go to state 51
 
 
-State 124
+State 125
 
    36 other_stmt: RETURN . expr_or_e SEMICOLON
    50 expr_or_e: . expr_10
@@ -2949,15 +2970,15 @@ State 124
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -2971,8 +2992,8 @@ State 124
 
     $default  reduce using rule 51 (expr_or_e)
 
-    expr_or_e        go to state 151
-    expr_10          go to state 152
+    expr_or_e        go to state 154
+    expr_10          go to state 155
     expr_9           go to state 39
     expr_8           go to state 40
     expr_7           go to state 41
@@ -2988,18 +3009,18 @@ State 124
     atomic           go to state 51
 
 
-State 125
+State 126
 
     7 decl_var: IDENTIFIER . COLON type_var SEMICOLON
     8         | IDENTIFIER . COLON type_var EQUALS expr_10 SEMICOLON
-   90 ident_name: IDENTIFIER .  [SEMICOLON, QUESTION, EQUALS, GT, GE, LT, LE, EE, NE, AND, OR, INCREMENT, DECREMENT, OPEN_PAREN, OPEN_SQUARE, CLOSE_CURLY, PLUS, MINUS, MULTIPLY, DIVIDE, REMAINDER, EXP, COMMA]
+   94 ident_name: IDENTIFIER .  [SEMICOLON, QUESTION, EQUALS, GT, GE, LT, LE, EE, NE, AND, OR, INCREMENT, DECREMENT, OPEN_PAREN, OPEN_SQUARE, CLOSE_CURLY, PLUS, MINUS, MULTIPLY, DIVIDE, REMAINDER, EXP, COMMA]
 
-    COLON  shift, and go to state 153
+    COLON  shift, and go to state 156
 
-    $default  reduce using rule 90 (ident_name)
+    $default  reduce using rule 94 (ident_name)
 
 
-State 126
+State 127
 
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
@@ -3055,44 +3076,44 @@ State 126
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   96 expr_list: . expr_10 COMMA expr_list
-   97          | . expr_10
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
-  103       | OPEN_CURLY . expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  100 expr_list: . expr_10 COMMA expr_list
+  101          | . expr_10
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
+  107       | OPEN_CURLY . expr_list CLOSE_CURLY
 
-    FOR              shift, and go to state 121
-    IF               shift, and go to state 122
-    PRINT            shift, and go to state 123
-    RETURN           shift, and go to state 124
+    FOR              shift, and go to state 122
+    IF               shift, and go to state 123
+    PRINT            shift, and go to state 124
+    RETURN           shift, and go to state 125
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
     CHAR_LITERAL     shift, and go to state 31
     STRING_LITERAL   shift, and go to state 32
-    IDENTIFIER       shift, and go to state 125
+    IDENTIFIER       shift, and go to state 126
     OPEN_PAREN       shift, and go to state 34
-    OPEN_CURLY       shift, and go to state 126
+    OPEN_CURLY       shift, and go to state 127
     MINUS            shift, and go to state 36
     NOT              shift, and go to state 37
 
     $default  reduce using rule 53 (stmt_list_e)
 
-    decl_var         go to state 127
-    stmt             go to state 128
-    other_stmt       go to state 129
-    if_stmt          go to state 130
-    matched_if_stmt  go to state 131
-    open_if_stmt     go to state 132
-    stmt_list_e      go to state 154
-    stmt_list        go to state 155
-    expr_10          go to state 156
+    decl_var         go to state 128
+    stmt             go to state 129
+    other_stmt       go to state 130
+    if_stmt          go to state 131
+    matched_if_stmt  go to state 132
+    open_if_stmt     go to state 133
+    stmt_list_e      go to state 157
+    stmt_list        go to state 158
+    expr_10          go to state 159
     expr_9           go to state 39
     expr_8           go to state 40
     expr_7           go to state 41
@@ -3109,14 +3130,14 @@ State 126
     atomic           go to state 51
 
 
-State 127
+State 128
 
    40 other_stmt: decl_var .
 
     $default  reduce using rule 40 (other_stmt)
 
 
-State 128
+State 129
 
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
@@ -3171,40 +3192,40 @@ State 128
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
-    FOR              shift, and go to state 121
-    IF               shift, and go to state 122
-    PRINT            shift, and go to state 123
-    RETURN           shift, and go to state 124
+    FOR              shift, and go to state 122
+    IF               shift, and go to state 123
+    PRINT            shift, and go to state 124
+    RETURN           shift, and go to state 125
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
     CHAR_LITERAL     shift, and go to state 31
     STRING_LITERAL   shift, and go to state 32
-    IDENTIFIER       shift, and go to state 125
+    IDENTIFIER       shift, and go to state 126
     OPEN_PAREN       shift, and go to state 34
-    OPEN_CURLY       shift, and go to state 126
+    OPEN_CURLY       shift, and go to state 127
     MINUS            shift, and go to state 36
     NOT              shift, and go to state 37
 
     $default  reduce using rule 55 (stmt_list)
 
-    decl_var         go to state 127
-    stmt             go to state 128
-    other_stmt       go to state 129
-    if_stmt          go to state 130
-    matched_if_stmt  go to state 131
-    open_if_stmt     go to state 132
-    stmt_list        go to state 157
-    expr_10          go to state 134
+    decl_var         go to state 128
+    stmt             go to state 129
+    other_stmt       go to state 130
+    if_stmt          go to state 131
+    matched_if_stmt  go to state 132
+    open_if_stmt     go to state 133
+    stmt_list        go to state 160
+    expr_10          go to state 135
     expr_9           go to state 39
     expr_8           go to state 40
     expr_7           go to state 41
@@ -3220,56 +3241,56 @@ State 128
     atomic           go to state 51
 
 
-State 129
+State 130
 
    46 matched_if_stmt: other_stmt .
 
     $default  reduce using rule 46 (matched_if_stmt)
 
 
-State 130
+State 131
 
    35 stmt: if_stmt .
 
     $default  reduce using rule 35 (stmt)
 
 
-State 131
+State 132
 
    42 if_stmt: matched_if_stmt .
 
     $default  reduce using rule 42 (if_stmt)
 
 
-State 132
+State 133
 
    43 if_stmt: open_if_stmt .
 
     $default  reduce using rule 43 (if_stmt)
 
 
-State 133
+State 134
 
    10 decl_func: IDENTIFIER COLON FUNCTION type_func EQUALS OPEN_CURLY stmt_list . CLOSE_CURLY
 
-    CLOSE_CURLY  shift, and go to state 158
-
-
-State 134
-
-   39 other_stmt: expr_10 . SEMICOLON
-
-    SEMICOLON  shift, and go to state 159
+    CLOSE_CURLY  shift, and go to state 161
 
 
 State 135
 
-   96 expr_list: expr_10 COMMA expr_list .
+   39 other_stmt: expr_10 . SEMICOLON
 
-    $default  reduce using rule 96 (expr_list)
+    SEMICOLON  shift, and go to state 162
 
 
 State 136
+
+  100 expr_list: expr_10 COMMA expr_list .
+
+    $default  reduce using rule 100 (expr_list)
+
+
+State 137
 
    56 expr_10: . expr_9 EQUALS expr_10
    57        | . expr_9 QUESTION expr_10 COLON expr_10
@@ -3305,15 +3326,15 @@ State 136
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -3325,7 +3346,7 @@ State 136
     MINUS            shift, and go to state 36
     NOT              shift, and go to state 37
 
-    expr_10          go to state 160
+    expr_10          go to state 163
     expr_9           go to state 39
     expr_8           go to state 40
     expr_7           go to state 41
@@ -3341,87 +3362,162 @@ State 136
     atomic           go to state 51
 
 
-State 137
-
-   89 func_call: ident_name OPEN_PAREN expr_list_e CLOSE_PAREN .
-
-    $default  reduce using rule 89 (func_call)
-
-
 State 138
 
-   92 bracket_set: . OPEN_SQUARE expr_10 CLOSE_SQUARE bracket_set
-   92            | OPEN_SQUARE expr_10 CLOSE_SQUARE . bracket_set
-   93            | . OPEN_SQUARE expr_10 CLOSE_SQUARE
-   93            | OPEN_SQUARE expr_10 CLOSE_SQUARE .  [SEMICOLON, COLON, QUESTION, EQUALS, GT, GE, LT, LE, EE, NE, AND, OR, INCREMENT, DECREMENT, CLOSE_PAREN, CLOSE_SQUARE, CLOSE_CURLY, PLUS, MINUS, MULTIPLY, DIVIDE, REMAINDER, EXP, COMMA]
+   56 expr_10: . expr_9 EQUALS expr_10
+   57        | . expr_9 QUESTION expr_10 COLON expr_10
+   58        | . expr_9
+   59 expr_9: . expr_9 OR expr_8
+   60       | . expr_8
+   61 expr_8: . expr_8 AND expr_7
+   62       | . expr_7
+   63 expr_7: . expr_7 LT expr_6
+   64       | . expr_7 LE expr_6
+   65       | . expr_7 EE expr_6
+   66       | . expr_7 GE expr_6
+   67       | . expr_7 GT expr_6
+   68       | . expr_7 NE expr_6
+   69       | . expr_6
+   70 expr_6: . expr_6 PLUS expr_5
+   71       | . expr_6 MINUS expr_5
+   72       | . expr_5
+   73 expr_5: . expr_5 MULTIPLY expr_4
+   74       | . expr_5 DIVIDE expr_4
+   75       | . expr_5 REMAINDER expr_4
+   76       | . expr_4
+   77 expr_4: . expr_3 EXP expr_4
+   78       | . expr_3
+   79 expr_3: . MINUS expr_3
+   80       | . NOT expr_3
+   81       | . expr_2
+   82 expr_2: . expr_2 INCREMENT
+   83       | . expr_2 DECREMENT
+   84       | . expr_1
+   85 expr_1: . OPEN_PAREN expr_10 CLOSE_PAREN
+   86       | . func_call
+   87       | . array_subscript
+   88       | . atomic
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   92 func_args: . expr_10 COMMA func_args
+   92          | expr_10 COMMA . func_args
+   93          | . expr_10
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
-    OPEN_SQUARE  shift, and go to state 88
+    INTEGER_LITERAL  shift, and go to state 29
+    BOOLEAN_LITERAL  shift, and go to state 30
+    CHAR_LITERAL     shift, and go to state 31
+    STRING_LITERAL   shift, and go to state 32
+    IDENTIFIER       shift, and go to state 33
+    OPEN_PAREN       shift, and go to state 34
+    OPEN_CURLY       shift, and go to state 35
+    MINUS            shift, and go to state 36
+    NOT              shift, and go to state 37
 
-    $default  reduce using rule 93 (bracket_set)
-
-    bracket_set  go to state 161
+    expr_10          go to state 116
+    expr_9           go to state 39
+    expr_8           go to state 40
+    expr_7           go to state 41
+    expr_6           go to state 42
+    expr_5           go to state 43
+    expr_4           go to state 44
+    expr_3           go to state 45
+    expr_2           go to state 46
+    expr_1           go to state 47
+    func_call        go to state 48
+    func_args        go to state 164
+    ident_name       go to state 49
+    array_subscript  go to state 50
+    atomic           go to state 51
 
 
 State 139
 
-   28 type_param: ARRAY . OPEN_SQUARE CLOSE_SQUARE type_param
+   89 func_call: ident_name OPEN_PAREN func_args_e CLOSE_PAREN .
 
-    OPEN_SQUARE  shift, and go to state 162
+    $default  reduce using rule 89 (func_call)
 
 
 State 140
+
+   96 bracket_set: . OPEN_SQUARE expr_10 CLOSE_SQUARE bracket_set
+   96            | OPEN_SQUARE expr_10 CLOSE_SQUARE . bracket_set
+   97            | . OPEN_SQUARE expr_10 CLOSE_SQUARE
+   97            | OPEN_SQUARE expr_10 CLOSE_SQUARE .  [SEMICOLON, COLON, QUESTION, EQUALS, GT, GE, LT, LE, EE, NE, AND, OR, INCREMENT, DECREMENT, CLOSE_PAREN, CLOSE_SQUARE, CLOSE_CURLY, PLUS, MINUS, MULTIPLY, DIVIDE, REMAINDER, EXP, COMMA]
+
+    OPEN_SQUARE  shift, and go to state 88
+
+    $default  reduce using rule 97 (bracket_set)
+
+    bracket_set  go to state 165
+
+
+State 141
+
+   28 type_param: ARRAY . OPEN_SQUARE CLOSE_SQUARE type_param
+
+    OPEN_SQUARE  shift, and go to state 166
+
+
+State 142
 
    26 type_param: AUTO .
 
     $default  reduce using rule 26 (type_param)
 
 
-State 141
+State 143
 
    23 type_param: BOOLEAN .
 
     $default  reduce using rule 23 (type_param)
 
 
-State 142
+State 144
 
    24 type_param: CHAR .
 
     $default  reduce using rule 24 (type_param)
 
 
-State 143
+State 145
 
    27 type_param: FUNCTION .
 
     $default  reduce using rule 27 (type_param)
 
 
-State 144
+State 146
 
    22 type_param: INTEGER .
 
     $default  reduce using rule 22 (type_param)
 
 
-State 145
+State 147
 
    25 type_param: STRING .
 
     $default  reduce using rule 25 (type_param)
 
 
-State 146
+State 148
 
    20 param_list: IDENTIFIER COLON type_param . COMMA param_list
    21           | IDENTIFIER COLON type_param .  [CLOSE_PAREN]
 
-    COMMA  shift, and go to state 163
+    COMMA  shift, and go to state 167
 
     $default  reduce using rule 21 (param_list)
 
 
-State 147
+State 149
 
    45 matched_if_stmt: FOR OPEN_PAREN . expr_or_e SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN matched_if_stmt
    49 open_if_stmt: FOR OPEN_PAREN . expr_or_e SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN open_if_stmt
@@ -3460,15 +3556,15 @@ State 147
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -3482,8 +3578,8 @@ State 147
 
     $default  reduce using rule 51 (expr_or_e)
 
-    expr_or_e        go to state 164
-    expr_10          go to state 152
+    expr_or_e        go to state 168
+    expr_10          go to state 155
     expr_9           go to state 39
     expr_8           go to state 40
     expr_7           go to state 41
@@ -3499,7 +3595,7 @@ State 147
     atomic           go to state 51
 
 
-State 148
+State 150
 
    41 condition: OPEN_PAREN . expr_10 CLOSE_PAREN
    56 expr_10: . expr_9 EQUALS expr_10
@@ -3535,15 +3631,15 @@ State 148
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -3555,7 +3651,7 @@ State 148
     MINUS            shift, and go to state 36
     NOT              shift, and go to state 37
 
-    expr_10          go to state 165
+    expr_10          go to state 169
     expr_9           go to state 39
     expr_8           go to state 40
     expr_7           go to state 41
@@ -3571,7 +3667,7 @@ State 148
     atomic           go to state 51
 
 
-State 149
+State 151
 
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
@@ -3624,36 +3720,36 @@ State 149
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
-    FOR              shift, and go to state 121
-    IF               shift, and go to state 122
-    PRINT            shift, and go to state 123
-    RETURN           shift, and go to state 124
+    FOR              shift, and go to state 122
+    IF               shift, and go to state 123
+    PRINT            shift, and go to state 124
+    RETURN           shift, and go to state 125
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
     CHAR_LITERAL     shift, and go to state 31
     STRING_LITERAL   shift, and go to state 32
-    IDENTIFIER       shift, and go to state 125
+    IDENTIFIER       shift, and go to state 126
     OPEN_PAREN       shift, and go to state 34
-    OPEN_CURLY       shift, and go to state 126
+    OPEN_CURLY       shift, and go to state 127
     MINUS            shift, and go to state 36
     NOT              shift, and go to state 37
 
-    decl_var         go to state 127
-    other_stmt       go to state 129
-    if_stmt          go to state 166
-    matched_if_stmt  go to state 167
-    open_if_stmt     go to state 132
-    expr_10          go to state 134
+    decl_var         go to state 128
+    other_stmt       go to state 130
+    if_stmt          go to state 170
+    matched_if_stmt  go to state 171
+    open_if_stmt     go to state 133
+    expr_10          go to state 135
     expr_9           go to state 39
     expr_8           go to state 40
     expr_7           go to state 41
@@ -3669,28 +3765,35 @@ State 149
     atomic           go to state 51
 
 
-State 150
+State 152
 
    37 other_stmt: PRINT expr_list_e . SEMICOLON
 
-    SEMICOLON  shift, and go to state 168
+    SEMICOLON  shift, and go to state 172
 
 
-State 151
+State 153
+
+   98 expr_list_e: expr_list .
+
+    $default  reduce using rule 98 (expr_list_e)
+
+
+State 154
 
    36 other_stmt: RETURN expr_or_e . SEMICOLON
 
-    SEMICOLON  shift, and go to state 169
+    SEMICOLON  shift, and go to state 173
 
 
-State 152
+State 155
 
    50 expr_or_e: expr_10 .
 
     $default  reduce using rule 50 (expr_or_e)
 
 
-State 153
+State 156
 
     7 decl_var: IDENTIFIER COLON . type_var SEMICOLON
     8         | IDENTIFIER COLON . type_var EQUALS expr_10 SEMICOLON
@@ -3711,75 +3814,82 @@ State 153
     type_var  go to state 17
 
 
-State 154
+State 157
 
    38 other_stmt: OPEN_CURLY stmt_list_e . CLOSE_CURLY
 
-    CLOSE_CURLY  shift, and go to state 170
+    CLOSE_CURLY  shift, and go to state 174
 
 
-State 155
+State 158
 
    52 stmt_list_e: stmt_list .
 
     $default  reduce using rule 52 (stmt_list_e)
 
 
-State 156
+State 159
 
    39 other_stmt: expr_10 . SEMICOLON
-   96 expr_list: expr_10 . COMMA expr_list
-   97          | expr_10 .  [CLOSE_CURLY]
+  100 expr_list: expr_10 . COMMA expr_list
+  101          | expr_10 .  [CLOSE_CURLY]
 
-    SEMICOLON  shift, and go to state 159
+    SEMICOLON  shift, and go to state 162
     COMMA      shift, and go to state 97
 
-    $default  reduce using rule 97 (expr_list)
+    $default  reduce using rule 101 (expr_list)
 
 
-State 157
+State 160
 
    54 stmt_list: stmt stmt_list .
 
     $default  reduce using rule 54 (stmt_list)
 
 
-State 158
+State 161
 
    10 decl_func: IDENTIFIER COLON FUNCTION type_func EQUALS OPEN_CURLY stmt_list CLOSE_CURLY .
 
     $default  reduce using rule 10 (decl_func)
 
 
-State 159
+State 162
 
    39 other_stmt: expr_10 SEMICOLON .
 
     $default  reduce using rule 39 (other_stmt)
 
 
-State 160
+State 163
 
    57 expr_10: expr_9 QUESTION expr_10 COLON expr_10 .
 
     $default  reduce using rule 57 (expr_10)
 
 
-State 161
+State 164
 
-   92 bracket_set: OPEN_SQUARE expr_10 CLOSE_SQUARE bracket_set .
+   92 func_args: expr_10 COMMA func_args .
 
-    $default  reduce using rule 92 (bracket_set)
+    $default  reduce using rule 92 (func_args)
 
 
-State 162
+State 165
+
+   96 bracket_set: OPEN_SQUARE expr_10 CLOSE_SQUARE bracket_set .
+
+    $default  reduce using rule 96 (bracket_set)
+
+
+State 166
 
    28 type_param: ARRAY OPEN_SQUARE . CLOSE_SQUARE type_param
 
-    CLOSE_SQUARE  shift, and go to state 171
+    CLOSE_SQUARE  shift, and go to state 175
 
 
-State 163
+State 167
 
    20 param_list: . IDENTIFIER COLON type_param COMMA param_list
    20           | IDENTIFIER COLON type_param COMMA . param_list
@@ -3787,64 +3897,64 @@ State 163
 
     IDENTIFIER  shift, and go to state 90
 
-    param_list  go to state 172
+    param_list  go to state 176
 
 
-State 164
+State 168
 
    45 matched_if_stmt: FOR OPEN_PAREN expr_or_e . SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN matched_if_stmt
    49 open_if_stmt: FOR OPEN_PAREN expr_or_e . SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN open_if_stmt
 
-    SEMICOLON  shift, and go to state 173
+    SEMICOLON  shift, and go to state 177
 
 
-State 165
+State 169
 
    41 condition: OPEN_PAREN expr_10 . CLOSE_PAREN
 
-    CLOSE_PAREN  shift, and go to state 174
+    CLOSE_PAREN  shift, and go to state 178
 
 
-State 166
+State 170
 
    47 open_if_stmt: IF condition if_stmt .
 
     $default  reduce using rule 47 (open_if_stmt)
 
 
-State 167
+State 171
 
    42 if_stmt: matched_if_stmt .  [FOR, IF, PRINT, RETURN, INTEGER_LITERAL, BOOLEAN_LITERAL, CHAR_LITERAL, STRING_LITERAL, IDENTIFIER, OPEN_PAREN, OPEN_CURLY, CLOSE_CURLY, MINUS, NOT]
    44 matched_if_stmt: IF condition matched_if_stmt . ELSE matched_if_stmt
    48 open_if_stmt: IF condition matched_if_stmt . ELSE open_if_stmt
 
-    ELSE  shift, and go to state 175
+    ELSE  shift, and go to state 179
 
     $default  reduce using rule 42 (if_stmt)
 
 
-State 168
+State 172
 
    37 other_stmt: PRINT expr_list_e SEMICOLON .
 
     $default  reduce using rule 37 (other_stmt)
 
 
-State 169
+State 173
 
    36 other_stmt: RETURN expr_or_e SEMICOLON .
 
     $default  reduce using rule 36 (other_stmt)
 
 
-State 170
+State 174
 
    38 other_stmt: OPEN_CURLY stmt_list_e CLOSE_CURLY .
 
     $default  reduce using rule 38 (other_stmt)
 
 
-State 171
+State 175
 
    22 type_param: . INTEGER
    23           | . BOOLEAN
@@ -3855,25 +3965,25 @@ State 171
    28           | . ARRAY OPEN_SQUARE CLOSE_SQUARE type_param
    28           | ARRAY OPEN_SQUARE CLOSE_SQUARE . type_param
 
-    ARRAY     shift, and go to state 139
-    AUTO      shift, and go to state 140
-    BOOLEAN   shift, and go to state 141
-    CHAR      shift, and go to state 142
-    FUNCTION  shift, and go to state 143
-    INTEGER   shift, and go to state 144
-    STRING    shift, and go to state 145
+    ARRAY     shift, and go to state 141
+    AUTO      shift, and go to state 142
+    BOOLEAN   shift, and go to state 143
+    CHAR      shift, and go to state 144
+    FUNCTION  shift, and go to state 145
+    INTEGER   shift, and go to state 146
+    STRING    shift, and go to state 147
 
-    type_param  go to state 176
+    type_param  go to state 180
 
 
-State 172
+State 176
 
    20 param_list: IDENTIFIER COLON type_param COMMA param_list .
 
     $default  reduce using rule 20 (param_list)
 
 
-State 173
+State 177
 
    45 matched_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON . expr_or_e SEMICOLON expr_or_e CLOSE_PAREN matched_if_stmt
    49 open_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON . expr_or_e SEMICOLON expr_or_e CLOSE_PAREN open_if_stmt
@@ -3912,15 +4022,15 @@ State 173
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -3934,8 +4044,8 @@ State 173
 
     $default  reduce using rule 51 (expr_or_e)
 
-    expr_or_e        go to state 177
-    expr_10          go to state 152
+    expr_or_e        go to state 181
+    expr_10          go to state 155
     expr_9           go to state 39
     expr_8           go to state 40
     expr_7           go to state 41
@@ -3951,14 +4061,14 @@ State 173
     atomic           go to state 51
 
 
-State 174
+State 178
 
    41 condition: OPEN_PAREN expr_10 CLOSE_PAREN .
 
     $default  reduce using rule 41 (condition)
 
 
-State 175
+State 179
 
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
@@ -4008,35 +4118,35 @@ State 175
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
-    FOR              shift, and go to state 121
-    IF               shift, and go to state 122
-    PRINT            shift, and go to state 123
-    RETURN           shift, and go to state 124
+    FOR              shift, and go to state 122
+    IF               shift, and go to state 123
+    PRINT            shift, and go to state 124
+    RETURN           shift, and go to state 125
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
     CHAR_LITERAL     shift, and go to state 31
     STRING_LITERAL   shift, and go to state 32
-    IDENTIFIER       shift, and go to state 125
+    IDENTIFIER       shift, and go to state 126
     OPEN_PAREN       shift, and go to state 34
-    OPEN_CURLY       shift, and go to state 126
+    OPEN_CURLY       shift, and go to state 127
     MINUS            shift, and go to state 36
     NOT              shift, and go to state 37
 
-    decl_var         go to state 127
-    other_stmt       go to state 129
-    matched_if_stmt  go to state 178
-    open_if_stmt     go to state 179
-    expr_10          go to state 134
+    decl_var         go to state 128
+    other_stmt       go to state 130
+    matched_if_stmt  go to state 182
+    open_if_stmt     go to state 183
+    expr_10          go to state 135
     expr_9           go to state 39
     expr_8           go to state 40
     expr_7           go to state 41
@@ -4052,36 +4162,36 @@ State 175
     atomic           go to state 51
 
 
-State 176
+State 180
 
    28 type_param: ARRAY OPEN_SQUARE CLOSE_SQUARE type_param .
 
     $default  reduce using rule 28 (type_param)
 
 
-State 177
+State 181
 
    45 matched_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON expr_or_e . SEMICOLON expr_or_e CLOSE_PAREN matched_if_stmt
    49 open_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON expr_or_e . SEMICOLON expr_or_e CLOSE_PAREN open_if_stmt
 
-    SEMICOLON  shift, and go to state 180
+    SEMICOLON  shift, and go to state 184
 
 
-State 178
+State 182
 
    44 matched_if_stmt: IF condition matched_if_stmt ELSE matched_if_stmt .
 
     $default  reduce using rule 44 (matched_if_stmt)
 
 
-State 179
+State 183
 
    48 open_if_stmt: IF condition matched_if_stmt ELSE open_if_stmt .
 
     $default  reduce using rule 48 (open_if_stmt)
 
 
-State 180
+State 184
 
    45 matched_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON expr_or_e SEMICOLON . expr_or_e CLOSE_PAREN matched_if_stmt
    49 open_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON expr_or_e SEMICOLON . expr_or_e CLOSE_PAREN open_if_stmt
@@ -4120,15 +4230,15 @@ State 180
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
@@ -4142,8 +4252,8 @@ State 180
 
     $default  reduce using rule 51 (expr_or_e)
 
-    expr_or_e        go to state 181
-    expr_10          go to state 152
+    expr_or_e        go to state 185
+    expr_10          go to state 155
     expr_9           go to state 39
     expr_8           go to state 40
     expr_7           go to state 41
@@ -4159,15 +4269,15 @@ State 180
     atomic           go to state 51
 
 
-State 181
+State 185
 
    45 matched_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON expr_or_e SEMICOLON expr_or_e . CLOSE_PAREN matched_if_stmt
    49 open_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON expr_or_e SEMICOLON expr_or_e . CLOSE_PAREN open_if_stmt
 
-    CLOSE_PAREN  shift, and go to state 182
+    CLOSE_PAREN  shift, and go to state 186
 
 
-State 182
+State 186
 
     7 decl_var: . IDENTIFIER COLON type_var SEMICOLON
     8         | . IDENTIFIER COLON type_var EQUALS expr_10 SEMICOLON
@@ -4217,35 +4327,35 @@ State 182
    86       | . func_call
    87       | . array_subscript
    88       | . atomic
-   89 func_call: . ident_name OPEN_PAREN expr_list_e CLOSE_PAREN
-   90 ident_name: . IDENTIFIER
-   91 array_subscript: . ident_name bracket_set
-   98 atomic: . INTEGER_LITERAL
-   99       | . BOOLEAN_LITERAL
-  100       | . CHAR_LITERAL
-  101       | . STRING_LITERAL
-  102       | . ident_name
-  103       | . OPEN_CURLY expr_list CLOSE_CURLY
+   89 func_call: . ident_name OPEN_PAREN func_args_e CLOSE_PAREN
+   94 ident_name: . IDENTIFIER
+   95 array_subscript: . ident_name bracket_set
+  102 atomic: . INTEGER_LITERAL
+  103       | . BOOLEAN_LITERAL
+  104       | . CHAR_LITERAL
+  105       | . STRING_LITERAL
+  106       | . ident_name
+  107       | . OPEN_CURLY expr_list CLOSE_CURLY
 
-    FOR              shift, and go to state 121
-    IF               shift, and go to state 122
-    PRINT            shift, and go to state 123
-    RETURN           shift, and go to state 124
+    FOR              shift, and go to state 122
+    IF               shift, and go to state 123
+    PRINT            shift, and go to state 124
+    RETURN           shift, and go to state 125
     INTEGER_LITERAL  shift, and go to state 29
     BOOLEAN_LITERAL  shift, and go to state 30
     CHAR_LITERAL     shift, and go to state 31
     STRING_LITERAL   shift, and go to state 32
-    IDENTIFIER       shift, and go to state 125
+    IDENTIFIER       shift, and go to state 126
     OPEN_PAREN       shift, and go to state 34
-    OPEN_CURLY       shift, and go to state 126
+    OPEN_CURLY       shift, and go to state 127
     MINUS            shift, and go to state 36
     NOT              shift, and go to state 37
 
-    decl_var         go to state 127
-    other_stmt       go to state 129
-    matched_if_stmt  go to state 183
-    open_if_stmt     go to state 184
-    expr_10          go to state 134
+    decl_var         go to state 128
+    other_stmt       go to state 130
+    matched_if_stmt  go to state 187
+    open_if_stmt     go to state 188
+    expr_10          go to state 135
     expr_9           go to state 39
     expr_8           go to state 40
     expr_7           go to state 41
@@ -4261,14 +4371,14 @@ State 182
     atomic           go to state 51
 
 
-State 183
+State 187
 
    45 matched_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN matched_if_stmt .
 
     $default  reduce using rule 45 (matched_if_stmt)
 
 
-State 184
+State 188
 
    49 open_if_stmt: FOR OPEN_PAREN expr_or_e SEMICOLON expr_or_e SEMICOLON expr_or_e CLOSE_PAREN open_if_stmt .
 

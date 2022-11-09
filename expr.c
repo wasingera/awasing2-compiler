@@ -86,12 +86,18 @@ struct expr * expr_create_string_literal( const char *str ) {
 }
 
 struct expr * expr_create_func_call(struct expr* name, struct expr* args) {
-    struct expr* list = expr_create(EXPR_LIST, NULL, NULL);
-    list->next = args;
+    // struct expr* list = expr_create(EXPR_LIST, NULL, NULL);
+    // list->next = args;
 
     struct expr* e = expr_create(EXPR_FUNC_CALL, name, NULL);
-    e->middle = list;
+    e->middle = args;
 
+    return e;
+}
+
+struct expr* expr_create_func_args(struct expr* curr, struct expr* next) {
+    struct expr* e = expr_create(EXPR_ARG, curr, NULL);
+    e->middle = next;
     return e;
 }
 
@@ -394,8 +400,14 @@ void expr_print_val(struct expr* e) {
             break;
         case EXPR_FUNC_CALL:
             printf("(");
-            expr_print_list(e->middle);
+            expr_print(e->middle, NULL);
             printf(")");
+            break;
+        case EXPR_ARG:
+            if (e->middle) {
+                printf(", ");
+                expr_print(e->middle, NULL);
+            }
             break;
         case EXPR_LIST:
             expr_print_list(e);
