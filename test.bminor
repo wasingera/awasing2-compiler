@@ -1,1 +1,5 @@
-a: char = f('a', "asdf");
+a: integer = "asdf";
+
+f: function integer () = {
+    a = 4;
+}

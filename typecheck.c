@@ -23,10 +23,76 @@ struct type* expr_typecheck(struct expr* e) {
             result = type_create(TYPE_CHAR, NULL, NULL);
             break;
         case EXPR_ARRAY_LITERAL:
+            // TODO: update this to copy subtype of arrays -- will need to update array literal creation
             result = type_create(TYPE_ARRAY, NULL, NULL);
             break;
         case EXPR_IDENT:
             result = type_copy(e->symbol->type);
+            break;
+        case EXPR_ASSIGN:
+            if (!type_equals(lt, rt)) {
+                printf("type error: cannot assign a ");
+                type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(")");
+                printf(" to a ");
+                type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")\n");
+            }
+            result = type_copy(lt);
+            break;
+        case EXPR_TERNARY:
+            if (lt->kind != TYPE_BOOLEAN) {
+                printf("type error: cannot use a ");
+                type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(") in a ternary expression ");
+                printf("(must be boolean)");
+            }
+            result = type_copy(mt);
+            break;
+        case EXPR_OR:
+            if (lt->kind != TYPE_BOOLEAN || rt->kind != TYPE_BOOLEAN) {
+                printf("type error: cannot OR a ");
+                type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
+                printf(" and a ");
+                type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(") (must both be boolean)\n");
+            }
+            result = type_create(TYPE_BOOLEAN, NULL, NULL);
+            break;
+        case EXPR_AND:
+            if (lt->kind != TYPE_BOOLEAN || rt->kind != TYPE_BOOLEAN) {
+                printf("type error: cannot AND a ");
+                type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
+                printf(" and a ");
+                type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(") (must both be boolean)\n");
+            }
+            result = type_create(TYPE_BOOLEAN, NULL, NULL);
+            break;
+        case EXPR_LT:
+        case EXPR_LE:
+        case EXPR_GE:
+        case EXPR_GT:
+            if (lt->kind != TYPE_INTEGER || rt->kind != TYPE_INTEGER) {
+                printf("type error: cannot compare a ");
+                type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
+                printf(" to a ");
+                type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(") (must both be integer)\n");
+            }
+            result = type_create(TYPE_BOOLEAN, NULL, NULL);
+            break;
+        case EXPR_EE:
+        case EXPR_NE:
+            if (lt->kind == TYPE_VOID || lt->kind == TYPE_FUNCTION || lt->kind == TYPE_ARRAY) {
+                printf("type error: cannot use a ");
+                type_print(lt); printf("()"); expr_print(e->left, NULL); printf("()"); printf("in an equality test\n");
+            }
+            if (rt->kind == TYPE_VOID || lt->kind == TYPE_FUNCTION || lt->kind == TYPE_ARRAY) {
+                printf("type error: cannot use a ");
+                type_print(rt); printf("()"); expr_print(e->right, NULL); printf("()"); printf("in an equality test\n");
+            }
+            if (lt->kind != rt->kind) {
+                printf("type error: cannot compare a ");
+                type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
+                printf(" to a ");
+                type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(") (must be same type)\n");
+            }
+            result = type_create(TYPE_BOOLEAN, NULL, NULL);
             break;
         case EXPR_ADD:
             if (lt->kind != TYPE_INTEGER || rt->kind != TYPE_INTEGER) {
@@ -64,16 +130,68 @@ struct type* expr_typecheck(struct expr* e) {
             }
             result = type_create(TYPE_INTEGER, NULL, NULL);
             break;
+        case EXPR_MOD:
+            if (lt->kind != TYPE_INTEGER || rt->kind != TYPE_INTEGER) {
+                printf("type error: cannot mod a ");
+                type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
+                printf(" and a ");
+                type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(")\n");
+            }
+            result = type_create(TYPE_INTEGER, NULL, NULL);
+            break;
+        case EXPR_EXP:
+            if (lt->kind != TYPE_INTEGER || rt->kind != TYPE_INTEGER) {
+                printf("type error: cannot exponentiate a ");
+                type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
+                printf(" and a ");
+                type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(")\n");
+            }
+            result = type_create(TYPE_INTEGER, NULL, NULL);
+            break;
+        case EXPR_NEG:
+            if (rt->kind != TYPE_INTEGER) {
+                printf("type error: cannot negate a ");
+                type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(") (must be integer)\n");
+            }
+            result = type_create(TYPE_INTEGER, NULL, NULL);
+            break;
+        case EXPR_NOT:
+            if (rt->kind != TYPE_INTEGER) {
+                printf("type error: cannot negate a ");
+                type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(") (must be boolean)\n");
+            }
+            result = type_create(TYPE_INTEGER, NULL, NULL);
+            break;
+        case EXPR_INCR:
+            if (lt->kind != TYPE_INTEGER) {
+                printf("type error: cannot increment a ");
+                type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(") (must be integer)\n");
+            }
+            result = type_create(TYPE_INTEGER, NULL, NULL);
+            break;
+        case EXPR_DECR:
+            if (lt->kind != TYPE_INTEGER) {
+                printf("type error: cannot decrement a ");
+                type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(") (must be integer)\n");
+            }
+            result = type_create(TYPE_INTEGER, NULL, NULL);
+            break;
     }
 
     return result;
 }
 
-void decl_typecheck(struct decl *d) {
+void decl_typecheck(struct decl *d)  {
     if (!d) return;
 
-    if (d->value)
-        expr_typecheck(d->value);
+    if (d->value) {
+        struct type* e_t = expr_typecheck(d->value);
+        if (!type_equals(d->type, e_t)) {
+            printf("type error: cannot assign a ");
+            type_print(e_t); printf(" ("); expr_print(d->value, NULL); printf(") ");
+            printf("to a "); type_print(d->type); printf("\n");
+        }
+    }
 
     if (d->code)
         stmt_typecheck(d->code, d->type);
@@ -116,6 +234,15 @@ void stmt_typecheck(struct stmt* s, struct type* f_type) {
             break;
         case STMT_BLOCK:
             stmt_typecheck(s->body, f_type);
+            break;
+        case STMT_PRINT:
+            if (s->expr && s->expr->next) {
+                struct expr* curr = s->expr->next;
+                while (curr) {
+                    expr_typecheck(curr);
+                    curr = curr->next;
+                }
+            }
             break;
     }
 

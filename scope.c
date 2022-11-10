@@ -18,6 +18,7 @@ void scope_exit() {
 
     scope_stack = scope_stack->next;
 
+    hash_table_delete(remove->table);
     free(remove);
 }
 
