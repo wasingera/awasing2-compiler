@@ -42,7 +42,13 @@ struct type* expr_typecheck(struct expr* e) {
             if (lt->kind != TYPE_BOOLEAN) {
                 printf("type error: cannot use a ");
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(") in a ternary expression ");
-                printf("(must be boolean)");
+                printf("(must be boolean)\n");
+            }
+            if (!type_equals(mt, rt)) {
+                printf("type error: cannot return different types ");
+                type_print(mt); printf(" ("); expr_print(e->middle, NULL); printf(") and ");
+                type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(") ");
+                printf("in a ternary expression\n");
             }
             result = type_copy(mt);
             break;
@@ -80,13 +86,13 @@ struct type* expr_typecheck(struct expr* e) {
         case EXPR_NE:
             if (lt->kind == TYPE_VOID || lt->kind == TYPE_FUNCTION || lt->kind == TYPE_ARRAY) {
                 printf("type error: cannot use a ");
-                type_print(lt); printf("()"); expr_print(e->left, NULL); printf("()"); printf("in an equality test\n");
+                type_print(lt); printf("("); expr_print(e->left, NULL); printf(")"); printf("in an equality test\n");
             }
             if (rt->kind == TYPE_VOID || lt->kind == TYPE_FUNCTION || lt->kind == TYPE_ARRAY) {
                 printf("type error: cannot use a ");
-                type_print(rt); printf("()"); expr_print(e->right, NULL); printf("()"); printf("in an equality test\n");
+                type_print(rt); printf("("); expr_print(e->right, NULL); printf(")"); printf("in an equality test\n");
             }
-            if (lt->kind != rt->kind) {
+            if (!type_equals(lt, rt)) {
                 printf("type error: cannot compare a ");
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
                 printf(" to a ");
@@ -176,9 +182,39 @@ struct type* expr_typecheck(struct expr* e) {
             }
             result = type_create(TYPE_INTEGER, NULL, NULL);
             break;
+        case EXPR_FUNC_CALL: {
+            struct param_list* params = e->left->symbol->type->params;
+            struct expr* args = e->middle;
+            param_list_typecheck(e->left->name, params, args);
+            break;
+         }
     }
 
     return result;
+}
+
+void param_list_typecheck(const char* f_name, struct param_list* params, struct expr* args) {
+    struct param_list* curr_p = params;
+    struct expr* curr_a = args;
+
+    while (curr_p && curr_a) {
+        struct type* type_a = expr_typecheck(curr_a->left);
+        struct type* type_p = curr_p->type;
+        if (!type_equals(type_p, type_a)) {
+            printf("type error: passing ");
+            type_print(type_a); printf(" ("); expr_print(curr_a->left, NULL); printf("), ");
+            printf("expected "); type_print(type_p); printf(" to %s\n", f_name);
+        }
+
+        curr_p = curr_p->next;
+        curr_a = curr_a->middle;
+    }
+
+    if (curr_p && !curr_a) {
+        printf("type error: passed too few arguments to %s\n", f_name);
+    } else if (!curr_p && curr_a) {
+        printf("type error: passed too many arguments to %s\n", f_name);
+    }
 }
 
 void decl_typecheck(struct decl *d)  {

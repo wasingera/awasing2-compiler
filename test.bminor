@@ -1,5 +1,6 @@
-a: integer = "asdf";
+a: integer = 5;
+b: char = 'c';
 
-f: function integer () = {
-    a = 4;
+f: function integer (a: integer) = {
+    f(a, b);
 }
