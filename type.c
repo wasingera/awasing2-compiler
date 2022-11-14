@@ -66,9 +66,9 @@ int type_equals(struct type* a, struct type* b) {
     if (!a && !b) return 1;
     if (!a || !b) return 0;
 
-    // TODO: param_list_equals
     if (a->kind == b->kind && type_equals(a->subtype, b->subtype)) {
-        if (a->kind == TYPE_ARRAY && a->expr && b->expr && a->expr->literal_value != b->expr->literal_value)
+        if (a->kind == TYPE_ARRAY && a->expr && b->expr && a->expr->literal_value != b->expr->literal_value
+                && param_list_equals(a->params, b->params))
             return 0;
         return 1;
     }

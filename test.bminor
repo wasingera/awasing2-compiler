@@ -1,11 +1,5 @@
-b: char = '\\';
+z: integer = 5;
+f: function integer (x: integer, y: integer) = {
 
-x: array [2] integer = {1, 2};
-
-f: function auto (x: array[] integer) = {
-    x = {4, 4};
-
-    return 1;
+    return z;
 }
-
-y: char = f({1});

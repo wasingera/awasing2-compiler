@@ -17,6 +17,9 @@ extern int yyleng;
 
 extern struct decl* root;
 struct scope* scope_stack = NULL;
+
+extern int resolve_error;
+extern int typecheck_error;
 /* extern struct expr* root; */
 
 typedef enum yytokentype token_t;
@@ -71,7 +74,7 @@ int typecheck(char* fName) {
 
     decl_typecheck(root);
 
-    return 0;
+    return typecheck_error;
 }
 
 int resolve(char* fName) {
@@ -89,7 +92,7 @@ int resolve(char* fName) {
     // leave global scope
     scope_exit();
 
-    return 0;
+    return resolve_error;
 }
 
 int print(char* fName) {

@@ -1,6 +1,8 @@
 #include "typecheck.h"
 #include "type.h"
 
+int typecheck_error = 0;
+
 struct type* expr_typecheck(struct expr* e) {
     if (!e) return NULL;
 
@@ -31,6 +33,7 @@ struct type* expr_typecheck(struct expr* e) {
                     printf("type error: cannot have a ");
                     type_print(curr_type); printf(" ("); expr_print(curr->left, NULL); printf(") ");
                     printf("in an array of type "); type_print(array_type); printf("\n");
+                    typecheck_error = 1;
                 }
                 curr = curr->middle;
             }
@@ -55,6 +58,7 @@ struct type* expr_typecheck(struct expr* e) {
                 type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(")");
                 printf(" to a constant ");
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")\n");
+                typecheck_error = 1;
             }
 
             if (!type_equals(lt, rt)) {
@@ -62,6 +66,7 @@ struct type* expr_typecheck(struct expr* e) {
                 type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(")");
                 printf(" to a ");
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")\n");
+                typecheck_error = 1;
             }
             result = type_copy(lt);
             break;
@@ -70,12 +75,14 @@ struct type* expr_typecheck(struct expr* e) {
                 printf("type error: cannot use a ");
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(") in a ternary expression ");
                 printf("(must be boolean)\n");
+                typecheck_error = 1;
             }
             if (!type_equals(mt, rt)) {
                 printf("type error: cannot return different types ");
                 type_print(mt); printf(" ("); expr_print(e->middle, NULL); printf(") and ");
                 type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(") ");
                 printf("in a ternary expression\n");
+                typecheck_error = 1;
             }
             result = type_copy(mt);
             break;
@@ -85,6 +92,7 @@ struct type* expr_typecheck(struct expr* e) {
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
                 printf(" and a ");
                 type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(") (must both be boolean)\n");
+                typecheck_error = 1;
             }
             result = type_create(TYPE_BOOLEAN, NULL, NULL);
             break;
@@ -94,6 +102,7 @@ struct type* expr_typecheck(struct expr* e) {
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
                 printf(" and a ");
                 type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(") (must both be boolean)\n");
+                typecheck_error = 1;
             }
             result = type_create(TYPE_BOOLEAN, NULL, NULL);
             break;
@@ -106,6 +115,7 @@ struct type* expr_typecheck(struct expr* e) {
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
                 printf(" to a ");
                 type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(") (must both be integer)\n");
+                typecheck_error = 1;
             }
             result = type_create(TYPE_BOOLEAN, NULL, NULL);
             break;
@@ -114,16 +124,19 @@ struct type* expr_typecheck(struct expr* e) {
             if (lt->kind == TYPE_VOID || lt->kind == TYPE_FUNCTION || lt->kind == TYPE_ARRAY) {
                 printf("type error: cannot use a ");
                 type_print(lt); printf("("); expr_print(e->left, NULL); printf(")"); printf("in an equality test\n");
+                typecheck_error = 1;
             }
             if (rt->kind == TYPE_VOID || lt->kind == TYPE_FUNCTION || lt->kind == TYPE_ARRAY) {
                 printf("type error: cannot use a ");
                 type_print(rt); printf("("); expr_print(e->right, NULL); printf(")"); printf("in an equality test\n");
+                typecheck_error = 1;
             }
             if (!type_equals(lt, rt)) {
                 printf("type error: cannot compare a ");
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
                 printf(" to a ");
                 type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(") (must be same type)\n");
+                typecheck_error = 1;
             }
             result = type_create(TYPE_BOOLEAN, NULL, NULL);
             break;
@@ -133,6 +146,7 @@ struct type* expr_typecheck(struct expr* e) {
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
                 printf(" to a ");
                 type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(")\n");
+                typecheck_error = 1;
             }
             result = type_create(TYPE_INTEGER, NULL, NULL);
             break;
@@ -142,6 +156,7 @@ struct type* expr_typecheck(struct expr* e) {
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
                 printf(" from a ");
                 type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(")\n");
+                typecheck_error = 1;
             }
             result = type_create(TYPE_INTEGER, NULL, NULL);
             break;
@@ -151,6 +166,7 @@ struct type* expr_typecheck(struct expr* e) {
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
                 printf(" and a ");
                 type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(")\n");
+                typecheck_error = 1;
             }
             result = type_create(TYPE_INTEGER, NULL, NULL);
             break;
@@ -160,6 +176,7 @@ struct type* expr_typecheck(struct expr* e) {
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
                 printf(" and a ");
                 type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(")\n");
+                typecheck_error = 1;
             }
             result = type_create(TYPE_INTEGER, NULL, NULL);
             break;
@@ -169,6 +186,7 @@ struct type* expr_typecheck(struct expr* e) {
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
                 printf(" and a ");
                 type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(")\n");
+                typecheck_error = 1;
             }
             result = type_create(TYPE_INTEGER, NULL, NULL);
             break;
@@ -178,6 +196,7 @@ struct type* expr_typecheck(struct expr* e) {
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")");
                 printf(" and a ");
                 type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(")\n");
+                typecheck_error = 1;
             }
             result = type_create(TYPE_INTEGER, NULL, NULL);
             break;
@@ -185,6 +204,7 @@ struct type* expr_typecheck(struct expr* e) {
             if (rt->kind != TYPE_INTEGER) {
                 printf("type error: cannot negate a ");
                 type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(") (must be integer)\n");
+                typecheck_error = 1;
             }
             result = type_create(TYPE_INTEGER, NULL, NULL);
             break;
@@ -192,6 +212,7 @@ struct type* expr_typecheck(struct expr* e) {
             if (rt->kind != TYPE_INTEGER) {
                 printf("type error: cannot negate a ");
                 type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(") (must be boolean)\n");
+                typecheck_error = 1;
             }
             result = type_create(TYPE_INTEGER, NULL, NULL);
             break;
@@ -199,6 +220,7 @@ struct type* expr_typecheck(struct expr* e) {
             if (lt->kind != TYPE_INTEGER) {
                 printf("type error: cannot increment a ");
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(") (must be integer)\n");
+                typecheck_error = 1;
             }
             result = type_create(TYPE_INTEGER, NULL, NULL);
             break;
@@ -206,6 +228,7 @@ struct type* expr_typecheck(struct expr* e) {
             if (lt->kind != TYPE_INTEGER) {
                 printf("type error: cannot decrement a ");
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(") (must be integer)\n");
+                typecheck_error = 1;
             }
             result = type_create(TYPE_INTEGER, NULL, NULL);
             break;
@@ -221,6 +244,7 @@ struct type* expr_typecheck(struct expr* e) {
             if (lt->kind != TYPE_ARRAY) {
                 printf("type error: can't subscript a ");
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")\n");
+                typecheck_error = 1;
             }
             result = array_subscript_typecheck(e->middle, lt->subtype);
             break;
@@ -241,6 +265,7 @@ struct type* array_subscript_typecheck(struct expr* index_list, struct type* typ
             printf("type error: can't use a ");
             type_print(index_type); printf(" ()"); expr_print(curr_index->left, NULL); printf("() ");
             printf("as an array index (must be integer)\n");
+            typecheck_error = 1;
         }
 
         curr_index = curr_index->middle;
@@ -252,6 +277,7 @@ struct type* array_subscript_typecheck(struct expr* index_list, struct type* typ
         printf("type error: cannot index a ");
         type_print(prev_type);
         printf("\n");
+        typecheck_error = 1;
     }
 
     return prev_type;
@@ -268,6 +294,7 @@ void param_list_typecheck(const char* f_name, struct param_list* params, struct 
             printf("type error: passing ");
             type_print(type_a); printf(" ("); expr_print(curr_a->left, NULL); printf("), ");
             printf("expected "); type_print(type_p); printf(" to %s\n", f_name);
+            typecheck_error = 1;
         }
 
         curr_p = curr_p->next;
@@ -276,8 +303,10 @@ void param_list_typecheck(const char* f_name, struct param_list* params, struct 
 
     if (curr_p && !curr_a) {
         printf("type error: passed too few arguments to %s\n", f_name);
+        typecheck_error = 1;
     } else if (!curr_p && curr_a) {
         printf("type error: passed too many arguments to %s\n", f_name);
+        typecheck_error = 1;
     }
 }
 
@@ -291,11 +320,24 @@ void decl_typecheck(struct decl *d)  {
             printf("type error: cannot assign a ");
             type_print(e_t); printf(" ("); expr_print(d->value, NULL); printf(") ");
             printf("to a "); type_print(d->type); printf("\n");
+            typecheck_error = 1;
         }
 
         if (d->type->kind == TYPE_AUTO) {
             d->type = type_copy(e_t);
             d->symbol->type = type_copy(e_t);
+        }
+
+        if (d->type->kind == TYPE_ARRAY) {
+            struct type* curr = d->type;
+            while (curr->kind == TYPE_ARRAY) {
+                if (curr->expr->kind != EXPR_INT_LITERAL) {
+                    printf("type error: must use integer literal in array size declaration, not ");
+                    expr_print(curr->expr, NULL); printf("\n");
+                    typecheck_error = 1;
+                }
+                curr = curr->subtype;
+            }
         }
     }
 
@@ -322,6 +364,7 @@ void stmt_typecheck(struct stmt* s, struct decl* func) {
             if (t->kind != TYPE_BOOLEAN) {
                 printf("type error: can't use "); type_print(t);
                 printf(" ("); expr_print(s->expr, NULL); printf(") as a condition (need boolean)");
+                typecheck_error = 1;
             }
             stmt_typecheck(s->body, func);
             stmt_typecheck(s->else_body, func);
@@ -345,7 +388,9 @@ void stmt_typecheck(struct stmt* s, struct decl* func) {
                 printf("type error: cannot return a "); type_print(t);
                 printf(" ("); expr_print(s->expr, NULL); printf(") in a function that returns ");
                 type_print(f_type->subtype); printf("\n");
+                typecheck_error = 1;
             }
+
             break;
         case STMT_BLOCK:
             stmt_typecheck(s->body, func);

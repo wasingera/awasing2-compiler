@@ -9,6 +9,10 @@ void decl_resolve(struct decl* d) {
 
     d->symbol = symbol_create(kind, d->type, d->name);
 
+    if (!d->code && d->type->kind == TYPE_FUNCTION) {
+        d->symbol->prototype = 1;
+    } 
+
     expr_resolve(d->value);
     scope_bind(d->name, d->symbol);
 
@@ -19,16 +23,22 @@ void decl_resolve(struct decl* d) {
         stmt_resolve(d->code);
         scope_exit();
         scope_exit();
+    } else if (!d->code) {
+        scope_enter();
+        param_list_resolve(d->type->params);
+        scope_exit();
     }
 
     decl_resolve(d->next);
 }
 
 void param_list_resolve(struct param_list* p) {
+    if (!p) return;
+
     struct param_list* curr = p;
     while (curr) {
-        p->symbol = symbol_create(SYMBOL_PARAM, p->type, p->name);
-        scope_bind(p->name, p->symbol);
+        curr->symbol = symbol_create(SYMBOL_PARAM, curr->type, curr->name);
+        scope_bind(curr->name, curr->symbol);
         curr = curr->next;
     }
 }

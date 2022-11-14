@@ -31,3 +31,21 @@ void param_print(struct param_list* param) {
     printf("%s: ", param->name);
     type_print(param->type);
 }
+
+int param_list_equals(struct param_list* p1, struct param_list* p2) {
+    struct param_list* curr1 = p1;
+    struct param_list* curr2 = p2;
+
+    while (curr1 && curr2) {
+        if (!type_equals(curr1->type, curr2->type))
+            return 0;
+
+        curr1 = curr1->next;
+        curr2 = curr2->next;
+    }
+
+    if ((curr1 && !curr2) || (!curr1 && curr2))
+        return 0;
+
+    return 1;
+}

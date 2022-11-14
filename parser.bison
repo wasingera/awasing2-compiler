@@ -107,7 +107,7 @@ decl_var: IDENTIFIER COLON type_var SEMICOLON { $$ = decl_create($1, $3, NULL, N
         ;
 
 decl_func: IDENTIFIER COLON FUNCTION type_func SEMICOLON { $$ = decl_create($1, $4, NULL, NULL, NULL); }
-         | IDENTIFIER COLON FUNCTION type_func EQUALS OPEN_CURLY stmt_list CLOSE_CURLY { $$ = decl_create_func_body($1, $4, $7); }
+         | IDENTIFIER COLON FUNCTION type_func EQUALS OPEN_CURLY stmt_list_e CLOSE_CURLY { $$ = decl_create_func_body($1, $4, $7); }
          ;
 
 type_func: INTEGER param_list_e { $$ = type_create_function(TYPE_INTEGER, $2); }

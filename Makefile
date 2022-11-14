@@ -1,6 +1,9 @@
 bminor: main.o scanner.o parser.o expr.o stmt.o type.o decl.o param_list.o scope.o hash_table.o symbol.o resolve.o typecheck.o
 	gcc -o $@ $^ -g
 
+test-typechecker: bminor
+	./tests/typecheck_tests/run_tests.sh
+
 test-printer: bminor
 	./tests/printer_tests/run_tests.sh
 
