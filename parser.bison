@@ -264,8 +264,8 @@ ident_name: IDENTIFIER { $$ = expr_create_name($1); }
 array_subscript: ident_name bracket_set { $$ = expr_create_array_subscript($1, $2); }
                ;
 
-bracket_set: OPEN_SQUARE expr_10 CLOSE_SQUARE bracket_set { $$ = expr_create_list($2, $4); }
-           | OPEN_SQUARE expr_10 CLOSE_SQUARE { $$ = $2; }
+bracket_set: OPEN_SQUARE expr_10 CLOSE_SQUARE bracket_set { $$ = expr_create_index_list($2, $4); }
+           | OPEN_SQUARE expr_10 CLOSE_SQUARE { $$ = expr_create_index_list($2, NULL); }
            ;
 
 expr_list_e: expr_list { $$ = $1; }
@@ -273,7 +273,7 @@ expr_list_e: expr_list { $$ = $1; }
            ;
 
 expr_list: expr_10 COMMA expr_list { $$ = expr_create_list($1, $3); }
-         | expr_10 { $$ = $1; }
+         | expr_10 { $$ = expr_create_list($1, NULL); }
          ;
 
 atomic: INTEGER_LITERAL { $$ = expr_create_integer_literal(atoi($1)); }

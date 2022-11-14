@@ -1,6 +1,7 @@
-a: integer = 5;
-b: char = 'c';
+b: char = '\\';
 
-f: function integer (a: integer) = {
-    f(a, b);
+x: auto = 5;
+
+f: function integer () = {
+    x = 6;
 }

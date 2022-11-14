@@ -23,10 +23,10 @@ struct stmt * stmt_create_if(struct expr* condition, struct stmt* if_block, stru
     return s;
 }
 
-struct stmt * stmt_create_print(struct expr* expr) {
+struct stmt * stmt_create_print(struct expr* list) {
     struct stmt* s = stmt_create(STMT_PRINT, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-    struct expr* list = expr_create(EXPR_LIST, NULL, NULL);
-    list->next = expr;
+    // struct expr* list = expr_create(EXPR_LIST, NULL, NULL);
+    // list->next = expr;
     s->expr = list;
 
     return s;
@@ -93,7 +93,7 @@ void stmt_print_val(struct stmt* s, int indent) {
             break;
         case STMT_PRINT:
             printf("%sprint ", indent_string);
-            expr_print_list(s->expr);
+            expr_print(s->expr, NULL);
             printf(";\n");
             break;
         case STMT_EXPR:

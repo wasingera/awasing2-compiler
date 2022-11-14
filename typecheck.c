@@ -22,14 +22,36 @@ struct type* expr_typecheck(struct expr* e) {
         case EXPR_CHAR_LITERAL:
             result = type_create(TYPE_CHAR, NULL, NULL);
             break;
-        case EXPR_ARRAY_LITERAL:
+        case EXPR_ARRAY_LITERAL: {
             // TODO: update this to copy subtype of arrays -- will need to update array literal creation
-            result = type_create(TYPE_ARRAY, NULL, NULL);
+            // assume first element of array is the type of whole thing
+            struct expr* curr = e->middle;
+            struct type* array_type = expr_typecheck(curr->left);
+
+            while (curr) {
+                struct type* curr_type = expr_typecheck(curr->left);
+                if (!type_equals(curr_type, array_type)) {
+                    printf("type error: cannot have a ");
+                    type_print(curr_type); printf(" ("); expr_print(curr->left, NULL); printf(") ");
+                    printf("in an array of type "); type_print(array_type); printf("\n");
+                }
+                curr = curr->middle;
+            }
+
+            result = type_create(TYPE_ARRAY, type_copy(array_type), NULL);
             break;
+         }
         case EXPR_IDENT:
             result = type_copy(e->symbol->type);
             break;
         case EXPR_ASSIGN:
+            if (e->left->kind != EXPR_IDENT) {
+                printf("type error: cannot assign a ");
+                type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(")");
+                printf(" to a constant ");
+                type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")\n");
+            }
+            // printf("debug: "); type_print(lt);
             if (!type_equals(lt, rt)) {
                 printf("type error: cannot assign a ");
                 type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(")");
@@ -186,11 +208,48 @@ struct type* expr_typecheck(struct expr* e) {
             struct param_list* params = e->left->symbol->type->params;
             struct expr* args = e->middle;
             param_list_typecheck(e->left->name, params, args);
+            result = type_copy(e->left->symbol->type->subtype);
             break;
          }
+        case EXPR_ARRAY_SUBSCRIPT: {
+            int baseline;
+            if (lt->kind != TYPE_ARRAY) {
+                printf("type error: can't subscript a ");
+                type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")\n");
+            }
+            result = array_subscript_typecheck(e->middle, lt->subtype);
+            break;
+       }
     }
 
     return result;
+}
+
+struct type* array_subscript_typecheck(struct expr* index_list, struct type* type) {
+    struct expr* curr_index = index_list;
+    struct type* curr_type = type;
+    struct type* prev_type = NULL;
+
+    while (curr_index && curr_type) {
+        struct type* index_type = expr_typecheck(curr_index->left);
+        if (index_type->kind != TYPE_INTEGER) {
+            printf("type error: can't use a ");
+            type_print(index_type); printf(" ()"); expr_print(curr_index->left, NULL); printf("() ");
+            printf("as an array index (must be integer)\n");
+        }
+
+        curr_index = curr_index->middle;
+        prev_type = curr_type;
+        curr_type = curr_type->subtype;
+    }
+
+    if (!curr_type && curr_index) {
+        printf("type error: cannot index a ");
+        type_print(prev_type);
+        printf("\n");
+    }
+
+    return prev_type;
 }
 
 void param_list_typecheck(const char* f_name, struct param_list* params, struct expr* args) {
@@ -220,12 +279,18 @@ void param_list_typecheck(const char* f_name, struct param_list* params, struct 
 void decl_typecheck(struct decl *d)  {
     if (!d) return;
 
+    // TODO: check array lengths
     if (d->value) {
         struct type* e_t = expr_typecheck(d->value);
-        if (!type_equals(d->type, e_t)) {
+        if (!type_equals(d->type, e_t) && d->type->kind != TYPE_AUTO) {
             printf("type error: cannot assign a ");
             type_print(e_t); printf(" ("); expr_print(d->value, NULL); printf(") ");
             printf("to a "); type_print(d->type); printf("\n");
+        }
+
+        if (d->type->kind == TYPE_AUTO) {
+            d->type = type_copy(e_t);
+            d->symbol->type = type_copy(e_t);
         }
     }
 
@@ -259,9 +324,11 @@ void stmt_typecheck(struct stmt* s, struct type* f_type) {
             expr_typecheck(s->init_expr);
             expr_typecheck(s->expr);
             expr_typecheck(s->next_expr);
+            stmt_typecheck(s->body, f_type);
             break;
         case STMT_RETURN:
             t = expr_typecheck(s->expr);
+            if (!t) t = type_create(TYPE_VOID, NULL, NULL);
             if (!type_equals(f_type->subtype, t)) {
                 printf("type error: cannot return a "); type_print(t);
                 printf(" ("); expr_print(s->expr, NULL); printf(") in a function that returns ");
@@ -272,11 +339,11 @@ void stmt_typecheck(struct stmt* s, struct type* f_type) {
             stmt_typecheck(s->body, f_type);
             break;
         case STMT_PRINT:
-            if (s->expr && s->expr->next) {
-                struct expr* curr = s->expr->next;
+            {
+                struct expr* curr = s->expr;
                 while (curr) {
-                    expr_typecheck(curr);
-                    curr = curr->next;
+                    expr_typecheck(curr->left);
+                    curr = curr->middle;
                 }
             }
             break;

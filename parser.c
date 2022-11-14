@@ -1984,13 +1984,13 @@ yyreduce:
 
   case 97:
 #line 267 "parser.bison" /* yacc.c:1646  */
-    { (yyval.expr) = expr_create_list((yyvsp[-2].expr), (yyvsp[0].expr)); }
+    { (yyval.expr) = expr_create_index_list((yyvsp[-2].expr), (yyvsp[0].expr)); }
 #line 1989 "parser.c" /* yacc.c:1646  */
     break;
 
   case 98:
 #line 268 "parser.bison" /* yacc.c:1646  */
-    { (yyval.expr) = (yyvsp[-1].expr); }
+    { (yyval.expr) = expr_create_index_list((yyvsp[-1].expr), NULL); }
 #line 1995 "parser.c" /* yacc.c:1646  */
     break;
 
@@ -2014,7 +2014,7 @@ yyreduce:
 
   case 102:
 #line 276 "parser.bison" /* yacc.c:1646  */
-    { (yyval.expr) = (yyvsp[0].expr); }
+    { (yyval.expr) = expr_create_list((yyvsp[0].expr), NULL); }
 #line 2019 "parser.c" /* yacc.c:1646  */
     break;
 

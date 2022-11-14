@@ -7,6 +7,7 @@ struct expr * expr_create( expr_t kind, struct expr *left, struct expr *right ) 
 
     e->kind = kind;
     e->left = left;
+    e->middle = NULL;
     e->right = right;
 
     /* if (e->left) */
@@ -23,19 +24,18 @@ struct expr * expr_create_ternary(struct expr* left, struct expr* middle, struct
     return e;
 }
 
-struct expr* expr_create_array_literal(struct expr* next) {
+struct expr* expr_create_array_literal(struct expr* list) {
     struct expr* e = expr_create(EXPR_ARRAY_LITERAL, NULL, NULL);
-    struct expr* list = expr_create(EXPR_LIST, NULL, NULL);
-    list->next = next;
     e->middle = list;
 
     return e;
 }
 
 struct expr* expr_create_list(struct expr* curr, struct expr* next) {
-    curr->next = next;
+    struct expr* e = expr_create(EXPR_LIST, curr, NULL);
+    e->middle = next;
 
-    return curr;
+    return e;
 }
 
 struct expr * expr_create_name( const char *n ) {
@@ -101,13 +101,17 @@ struct expr* expr_create_func_args(struct expr* curr, struct expr* next) {
     return e;
 }
 
-struct expr * expr_create_array_subscript(struct expr* name, struct expr* bracket_set) {
+struct expr * expr_create_array_subscript(struct expr* name, struct expr* index_list) {
     struct expr* e = expr_create(EXPR_ARRAY_SUBSCRIPT, name, NULL);
-    struct expr* list = expr_create(EXPR_LIST, NULL, NULL);
-    list->next = bracket_set;
 
-    e->middle = list;
+    e->middle = index_list;
 
+    return e;
+}
+
+struct expr* expr_create_index_list(struct expr* curr, struct expr* next) {
+    struct expr* e = expr_create(EXPR_INDEX, curr, NULL);
+    e->middle = next;
     return e;
 }
 
@@ -167,6 +171,8 @@ char* expand_char(const char c) {
     } else if (c == '\0') {
         buf[i++] = '\\';
         buf[i++] = '0';
+    } else if (c == '\\') {
+        buf[i++] = '\\';
     } else {
 
         buf[i++] = c;
@@ -222,6 +228,19 @@ void expr_print_bracket_set(struct expr* e) {
         expr_print(curr, e);
         printf("]");
         curr = curr->next;
+    }
+}
+
+void expr_print_index_list(struct expr* list) {
+    if (!list) return;
+
+    struct expr* curr = list;
+
+    while (curr) {
+        printf("[");
+        expr_print(curr->left, NULL);
+        printf("]");
+        curr = curr->middle;
     }
 }
 
@@ -396,7 +415,9 @@ void expr_print_val(struct expr* e) {
             printf("%s", expand_bool(e->literal_value));
             break;
         case EXPR_ARRAY_LITERAL:
-            expr_print_array_literal(e);
+            printf("{");
+            expr_print(e->middle, NULL);
+            printf("}");
             break;
         case EXPR_FUNC_CALL:
             printf("(");
@@ -410,8 +431,15 @@ void expr_print_val(struct expr* e) {
             }
             break;
         case EXPR_LIST:
-            expr_print_list(e);
+            if (e->middle) {
+                printf(", ");
+                expr_print(e->middle, NULL);
+            }
+            break;
         case EXPR_ARRAY_SUBSCRIPT:
-            expr_print_bracket_set(e->middle);
+            expr_print_index_list(e->middle);
+            break;
+        default:
+            break;
     }
 }
