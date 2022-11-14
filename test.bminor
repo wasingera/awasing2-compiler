@@ -1,7 +1,11 @@
 b: char = '\\';
 
-x: auto = 5;
+x: array [2] integer = {1, 2};
 
-f: function integer () = {
-    x = 6;
+f: function auto (x: array[] integer) = {
+    x = {4, 4};
+
+    return 1;
 }
+
+y: char = f({1});

@@ -16,6 +16,15 @@ struct expr * expr_create( expr_t kind, struct expr *left, struct expr *right ) 
     return e;
 }
 
+struct expr* expr_copy(struct expr* src) {
+    if (!src) return NULL;
+
+    struct expr* new = expr_create(src->kind, expr_copy(src->left), expr_copy(src->right));
+    new->middle = expr_copy(src->middle);
+
+    return new;
+}
+
 struct expr * expr_create_ternary(struct expr* left, struct expr* middle, struct expr* right) {
     struct expr* e = expr_create(EXPR_TERNARY, left, right);
     

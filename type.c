@@ -67,8 +67,11 @@ int type_equals(struct type* a, struct type* b) {
     if (!a || !b) return 0;
 
     // TODO: param_list_equals
-    if (a->kind == b->kind && type_equals(a->subtype, b->subtype))
+    if (a->kind == b->kind && type_equals(a->subtype, b->subtype)) {
+        if (a->kind == TYPE_ARRAY && a->expr && b->expr && a->expr->literal_value != b->expr->literal_value)
+            return 0;
         return 1;
+    }
 
     return 0;
 }
@@ -77,6 +80,7 @@ struct type* type_copy(struct type* t) {
     if (!t) return NULL;
 
     struct type* new = type_create(t->kind, type_copy(t->subtype), NULL);
+    new->expr = t->expr;
 
     return new;
 }

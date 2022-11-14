@@ -23,11 +23,8 @@ struct type* expr_typecheck(struct expr* e) {
             result = type_create(TYPE_CHAR, NULL, NULL);
             break;
         case EXPR_ARRAY_LITERAL: {
-            // TODO: update this to copy subtype of arrays -- will need to update array literal creation
-            // assume first element of array is the type of whole thing
             struct expr* curr = e->middle;
             struct type* array_type = expr_typecheck(curr->left);
-
             while (curr) {
                 struct type* curr_type = expr_typecheck(curr->left);
                 if (!type_equals(curr_type, array_type)) {
@@ -38,20 +35,28 @@ struct type* expr_typecheck(struct expr* e) {
                 curr = curr->middle;
             }
 
+            int array_length = 0;
+            curr = e->middle;
+            while (curr) {
+                array_length++;
+                curr = curr->middle;
+            }
+
             result = type_create(TYPE_ARRAY, type_copy(array_type), NULL);
+            result->expr = expr_create_integer_literal(array_length);
             break;
          }
         case EXPR_IDENT:
             result = type_copy(e->symbol->type);
             break;
         case EXPR_ASSIGN:
-            if (e->left->kind != EXPR_IDENT) {
+            if (e->left->kind != EXPR_IDENT && e->left->kind != EXPR_ARRAY_SUBSCRIPT) {
                 printf("type error: cannot assign a ");
                 type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(")");
                 printf(" to a constant ");
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")\n");
             }
-            // printf("debug: "); type_print(lt);
+
             if (!type_equals(lt, rt)) {
                 printf("type error: cannot assign a ");
                 type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(")");
@@ -295,13 +300,14 @@ void decl_typecheck(struct decl *d)  {
     }
 
     if (d->code)
-        stmt_typecheck(d->code, d->type);
+        stmt_typecheck(d->code, d);
 
     decl_typecheck(d->next);
 }
 
-void stmt_typecheck(struct stmt* s, struct type* f_type) {
+void stmt_typecheck(struct stmt* s, struct decl* func) {
     if (!s) return;
+    struct type* f_type = func->symbol->type;
 
     struct type* t;
     switch (s->kind) {
@@ -317,18 +323,24 @@ void stmt_typecheck(struct stmt* s, struct type* f_type) {
                 printf("type error: can't use "); type_print(t);
                 printf(" ("); expr_print(s->expr, NULL); printf(") as a condition (need boolean)");
             }
-            stmt_typecheck(s->body, f_type);
-            stmt_typecheck(s->else_body, f_type);
+            stmt_typecheck(s->body, func);
+            stmt_typecheck(s->else_body, func);
             break;
         case STMT_FOR:
             expr_typecheck(s->init_expr);
             expr_typecheck(s->expr);
             expr_typecheck(s->next_expr);
-            stmt_typecheck(s->body, f_type);
+            stmt_typecheck(s->body, func);
             break;
         case STMT_RETURN:
             t = expr_typecheck(s->expr);
             if (!t) t = type_create(TYPE_VOID, NULL, NULL);
+
+            if (f_type->subtype->kind == TYPE_AUTO) {
+                f_type->subtype = type_copy(t);
+                func->type = type_copy(t);
+            }
+
             if (!type_equals(f_type->subtype, t)) {
                 printf("type error: cannot return a "); type_print(t);
                 printf(" ("); expr_print(s->expr, NULL); printf(") in a function that returns ");
@@ -336,7 +348,7 @@ void stmt_typecheck(struct stmt* s, struct type* f_type) {
             }
             break;
         case STMT_BLOCK:
-            stmt_typecheck(s->body, f_type);
+            stmt_typecheck(s->body, func);
             break;
         case STMT_PRINT:
             {
@@ -349,5 +361,5 @@ void stmt_typecheck(struct stmt* s, struct type* f_type) {
             break;
     }
 
-    stmt_typecheck(s->next, f_type);
+    stmt_typecheck(s->next, func);
 }
