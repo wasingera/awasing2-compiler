@@ -1,6 +1,11 @@
 sand: function string () = {
     print "i like sand", 1234;
-    return "S/-\|\||>";
+    y: array[1] string = {sand()};
+    return "s/-\|\||>";
 }
 
-y: array[1] string = {sand()};
+abe: function integer () = {
+    s: string = sand();
+
+    return s == "s/-\|\||>" ? 1 : 2;
+}

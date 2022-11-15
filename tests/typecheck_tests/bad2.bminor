@@ -1,0 +1,8 @@
+main: function void () = {
+    g();
+    return 0;
+}
+
+g: function integer () = {
+    return 'c';
+}

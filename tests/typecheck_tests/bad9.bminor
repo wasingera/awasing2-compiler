@@ -1,0 +1,6 @@
+asdf: void;
+
+void_func: void () = {
+    if ("true" == true)
+        return asdf;
+}

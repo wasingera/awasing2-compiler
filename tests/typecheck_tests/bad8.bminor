@@ -1,0 +1,6 @@
+f: function integer (i: integer);
+g: function char (s: string);
+
+f: function integer (x: integer) = {
+    g: char = f(g(g(g("string"))));
+}

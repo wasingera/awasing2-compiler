@@ -1,0 +1,8 @@
+big: integer = 5 ^ 5 ^ 5 ^ '5';
+
+tostring: function string (b: integer) = {
+    return "b";
+}
+big_generator: function integer (b: integer, how: integer) = {
+    s: string = tostring(b * how ^ (b * how));
+}

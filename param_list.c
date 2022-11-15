@@ -49,3 +49,20 @@ int param_list_equals(struct param_list* p1, struct param_list* p2) {
 
     return 1;
 }
+
+struct param_list* param_list_copy(struct param_list* p) {
+    if (!p) return NULL;
+
+    struct param_list* curr = p;
+    struct param_list* new = param_list_create(curr->name, type_copy(curr->type), NULL);
+    struct param_list* curr_new = new;
+    curr = curr->next;
+
+    while (curr) {
+        curr_new->next = param_list_create(curr->name, type_copy(curr->type), NULL);
+        curr_new = curr_new->next;
+        curr = curr->next;
+    }
+
+    return new;
+}

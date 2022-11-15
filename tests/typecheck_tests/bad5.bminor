@@ -1,0 +1,12 @@
+vcxz: string = "asdf";
+
+string_concat: string = vcxz + " fdas";
+
+f: function string (s: string) = {
+    d: integer = length(s);
+    return "{s}";
+}
+
+length: function integer (s: string) = {
+    return s = "big";
+}

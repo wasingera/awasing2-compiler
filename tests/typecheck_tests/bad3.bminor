@@ -1,0 +1,6 @@
+asdf: char = 'c';
+
+boom_boom: function integer () = {
+    asdf: integer = 'f';
+    return false;
+}

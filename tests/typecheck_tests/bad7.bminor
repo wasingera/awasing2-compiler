@@ -1,0 +1,4 @@
+big: function char (b: array[] char) = {
+    x: integer = {1, 2, 3} + {4, 5, 6};
+    return true ? 'c' : "false";
+}

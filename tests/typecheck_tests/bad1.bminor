@@ -1,0 +1,5 @@
+x: function integer (x: string, y: char) = {
+    return 2;
+}
+
+y: char = x('c', "s");
