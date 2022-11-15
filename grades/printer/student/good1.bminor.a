@@ -1,0 +1,9 @@
+x: array[10] array[10] char = {{'a', 'b', 'c'}, {'d', 'e', 'f'}};
+f: function void (x: array[] array[] char) = {
+    for (i = 0; i < z; i++)
+    {
+        for (j = 0; j < k; j++)
+            print x[j][k];
+    }
+
+}

@@ -1,0 +1,15 @@
+far_down_func: function boolean () = {
+    is_far: boolean = (farness + farquad * "one billion") - 6 / 2;
+    if (is_far && !is_not_far)
+    {
+        if (is_not_not_far)
+            return true;
+        else
+            return "bad bad not far";
+    }
+    else
+    {
+        return "not farquad";
+    }
+
+}
