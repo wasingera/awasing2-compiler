@@ -209,12 +209,12 @@ struct type* expr_typecheck(struct expr* e) {
             result = type_create(TYPE_INTEGER, NULL, NULL);
             break;
         case EXPR_NOT:
-            if (rt->kind != TYPE_INTEGER) {
+            if (rt->kind != TYPE_BOOLEAN) {
                 printf("type error: cannot negate a ");
                 type_print(rt); printf(" ("); expr_print(e->right, NULL); printf(") (must be boolean)\n");
                 typecheck_error = 1;
             }
-            result = type_create(TYPE_INTEGER, NULL, NULL);
+            result = type_create(TYPE_BOOLEAN, NULL, NULL);
             break;
         case EXPR_INCR:
             if (lt->kind != TYPE_INTEGER) {
@@ -240,9 +240,8 @@ struct type* expr_typecheck(struct expr* e) {
             break;
          }
         case EXPR_ARRAY_SUBSCRIPT: {
-            int baseline;
             if (lt->kind != TYPE_ARRAY) {
-                printf("type error: can't subscript a ");
+                printf("type error: cannot subscript a ");
                 type_print(lt); printf(" ("); expr_print(e->left, NULL); printf(")\n");
                 typecheck_error = 1;
             }
@@ -341,8 +340,11 @@ void decl_typecheck(struct decl *d)  {
         }
     }
 
-    if (d->code)
+    if (d->code) {
         stmt_typecheck(d->code, d);
+        if (d->type->subtype->kind == TYPE_FUNCTION)
+            printf("type error: function is an invalid return type for %s", d->name);
+    }
 
     decl_typecheck(d->next);
 }
