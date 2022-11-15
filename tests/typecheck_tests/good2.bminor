@@ -1,0 +1,6 @@
+asdf: array[2] array[2] integer = {{1, 2}, {3, 4}};
+
+mUd: function string (dirt: string, water: string) = {
+    print "/\/\|_||>", asdf;
+    return true ? dirt : water;
+}

@@ -1,0 +1,6 @@
+sand: function string () = {
+    print "i like sand", 1234;
+    return "S/-\|\||>";
+}
+
+y: array[1] string = {sand()};

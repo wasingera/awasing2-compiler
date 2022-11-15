@@ -23,11 +23,7 @@ void decl_resolve(struct decl* d) {
         stmt_resolve(d->code);
         scope_exit();
         scope_exit();
-    } else if (!d->code) {
-        scope_enter();
-        param_list_resolve(d->type->params);
-        scope_exit();
-    }
+    } 
 
     decl_resolve(d->next);
 }

@@ -1,0 +1,7 @@
+f: function integer(a: integer, b: integer);
+
+x: integer = 5 + f(6, 6);
+
+f: function integer(a: integer, b: integer) = {
+    return a ^ (b + 6);
+}

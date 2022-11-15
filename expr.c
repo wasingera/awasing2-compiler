@@ -10,9 +10,6 @@ struct expr * expr_create( expr_t kind, struct expr *left, struct expr *right ) 
     e->middle = NULL;
     e->right = right;
 
-    /* if (e->left) */
-    /*     printf("%s\n", e->left->name); */
-
     return e;
 }
 
@@ -430,7 +427,7 @@ void expr_print_val(struct expr* e) {
             break;
         case EXPR_FUNC_CALL:
             printf("(");
-            expr_print(e->middle, NULL);
+            expr_print(e->middle, e);
             printf(")");
             break;
         case EXPR_ARG:

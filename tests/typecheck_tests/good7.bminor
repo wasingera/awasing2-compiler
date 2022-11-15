@@ -1,0 +1,13 @@
+kfacjnscajkhsgaghjfsansfjafd: string;
+
+f: function integer (i: integer);
+
+main: function void () = {
+    kfacjnscajkhsgaghjfsansfjafd  = "ajslkdhkfnjxdhma";
+
+    f(f(f(1)));
+}
+
+f: function integer (i: integer) = {
+    return 1;
+}

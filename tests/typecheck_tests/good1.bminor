@@ -1,0 +1,9 @@
+f: function char (b: boolean, a: array[] integer) = {
+    a[0] = 1;
+    return b ? 'a' : 'b';
+}
+
+g: function void () = {
+    c: char = f(true, {1, 2, 3});
+    return;
+}

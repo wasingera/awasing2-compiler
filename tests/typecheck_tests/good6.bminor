@@ -1,0 +1,5 @@
+big_numba: integer = 5 ^ 5 ^ 5 ^ 5 ^ 5;
+
+big_numba_printa: function void (big_numba: integer) = {
+    print big_numba, "that's a big numba";
+}

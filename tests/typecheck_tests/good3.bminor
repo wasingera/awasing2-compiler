@@ -1,0 +1,6 @@
+big_bog: function integer (x: char, y: string) = {
+    print x, y, '\n';
+    print "bingo";
+
+    z: array[1] char = {x};
+}

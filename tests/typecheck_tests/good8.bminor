@@ -1,0 +1,10 @@
+printer: function void() = {
+    print "b minor is bad!";
+    print "no. grrrrrr";
+    return;
+}
+
+print_int: function void(x: integer) = {
+    print x;
+    printer();
+}
