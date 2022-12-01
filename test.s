@@ -11,7 +11,7 @@ PUSHQ %rbp
 MOVQ %rsp, %rbp
 
 
-SUBQ $8, %rsp
+SUBQ $0, %rsp
 
 PUSHQ %rbx
 PUSHQ %r12
@@ -19,25 +19,16 @@ PUSHQ %r13
 PUSHQ %r14
 PUSHQ %r15
 
-MOVQ $0, %r10
-MOVQ %r10, -8(%rbp)
-MOVQ $0, %r12
-MOVQ %r12, -8(%rbp)
-MOVQ %r12, %r11
-.L0:
-MOVQ -8(%rbp), %r10
-MOVQ $5, %r11
-CMPQ %r11, %r10
-JL .L2
-MOVQ $0, %r11
-JMP .L3
-.L2:
-MOVQ $1, %r11
-.L3:
-CMP $0, %r11
-JE .L1
 LEA a, %r11
-MOVQ -8(%rbp), %r12
+MOVQ %r11, %rdi
+PUSHQ %r10
+PUSHQ %r11
+CALL f
+POPQ %r11
+POPQ %r10
+MOVQ %rax, %r10
+LEA a, %r11
+MOVQ $1, %r12
 MOVQ $8, %r13
 MOVQ %r12, %rax
 IMULQ %r13
@@ -48,34 +39,6 @@ MOVQ %r11, %rdi
 PUSHQ %r10
 PUSHQ %r11
 CALL print_integer
-POPQ %r11
-POPQ %r10
-MOVQ %rax, %r10
-MOVQ $32, %r11
-MOVQ %r11, %rdi
-PUSHQ %r10
-PUSHQ %r11
-CALL print_character
-POPQ %r11
-POPQ %r10
-MOVQ %rax, %r10
-MOVQ -8(%rbp), %r10
-MOVQ %r10, %r11
-INCQ %r10
-MOVQ %r10, -8(%rbp)
-JMP .L0
-.L1:
-MOVQ $10, %r11
-MOVQ %r11, %rdi
-PUSHQ %r10
-PUSHQ %r11
-CALL print_character
-POPQ %r11
-POPQ %r10
-MOVQ %rax, %r10
-PUSHQ %r10
-PUSHQ %r11
-CALL f
 POPQ %r11
 POPQ %r10
 MOVQ %rax, %r10
@@ -95,6 +58,7 @@ f:
 PUSHQ %rbp
 MOVQ %rsp, %rbp
 
+PUSHQ %rdi
 
 SUBQ $0, %rsp
 
@@ -104,16 +68,18 @@ PUSHQ %r13
 PUSHQ %r14
 PUSHQ %r15
 
-
-.data
-.L4: .string "function\n"
-
-.text
-LEA .L4, %r11
+MOVQ -8(%rbp), %r11
+MOVQ $0, %r12
+MOVQ $8, %r13
+MOVQ %r12, %rax
+IMULQ %r13
+MOVQ %rax, %r13
+ADDQ %r13, %r11
+MOVQ (%r11), %r11
 MOVQ %r11, %rdi
 PUSHQ %r10
 PUSHQ %r11
-CALL print_string
+CALL print_integer
 POPQ %r11
 POPQ %r10
 MOVQ %rax, %r10

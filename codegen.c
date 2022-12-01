@@ -234,8 +234,9 @@ void expr_codegen(struct expr* e) {
           }
         case EXPR_IDENT:
             e->reg = scratch_alloc();
-            if (expr_typecheck(e)->kind == TYPE_ARRAY)
+            if (e->symbol->kind == SYMBOL_GLOBAL && e->symbol->type->kind == TYPE_ARRAY) {
                 printf("LEA %s, %s\n", symbol_codegen(e->symbol), scratch_name(e->reg));
+            }
             else
                 printf("MOVQ %s, %s\n", symbol_codegen(e->symbol), scratch_name(e->reg));
             break;
