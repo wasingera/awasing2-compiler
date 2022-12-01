@@ -1,6 +1,9 @@
 bminor: main.o scanner.o parser.o expr.o stmt.o type.o decl.o param_list.o scope.o hash_table.o symbol.o resolve.o typecheck.o codegen.o
 	gcc -o $@ $^ -g
 
+test-codegen: bminor
+	./tests/codegen_tests/run_tests.sh fibonnacci
+
 test-typechecker: bminor
 	./tests/typecheck_tests/run_tests.sh
 
@@ -64,6 +67,8 @@ parser.c: parser.bison
 clean:
 	rm ./bminor ./*.o
 	find tests -name "*.out*" -type f -delete
+	find tests -name "*.s*" -type f -delete
+	find tests ! \( -name "run_tests.sh" -o -name "*.bminor" -o -name "*.c" \) -type f -executable -delete
 
 clean-tests:
 	find tests -name "*.out*" -type f -delete

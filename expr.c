@@ -131,6 +131,8 @@ char parse_char(const char* str) {
             buf = '\n';
         else if (*next == '0')
             buf = '\0';
+        else if (*next == 't')
+            buf = '\t';
         else
             buf = *next;
     else
@@ -152,6 +154,8 @@ char* parse_string(const char* str) {
                 buf[i] = '\n';
             } else if (*next == '0') {
                 buf[i] = '\0';
+            } else if (*next == 't') {
+                buf[i] = '\t';
             } else {
                 buf[i] = *next;
             }
@@ -178,6 +182,9 @@ char* expand_char(const char c) {
         buf[i++] = '0';
     } else if (c == '\\') {
         buf[i++] = '\\';
+    } else if (c == '\t') {
+        buf[i++] = '\\';
+        buf[i++] = 't';
     } else {
 
         buf[i++] = c;
@@ -205,6 +212,10 @@ char* expand_string(const char* str) {
         } else if (*curr == '\\') {
             buf[i++] = '\\';
             buf[i++] = '\\';
+        } else if (*curr == '\t') {
+            buf[i++] = '\\';
+            buf[i++] = 't';
+
         } else {
             /* buf[i++] = '\\'; */
             buf[i++] = *curr;

@@ -196,6 +196,8 @@ char* parse_escape_codes() {
                 buf[i] = '\n';
             } else if (*next == '0') {
                 buf[i] = '\0';
+            } else if (*next == 't') {
+                buf[i] = '\t';
             } else {
                 buf[i] = *next;
             }
