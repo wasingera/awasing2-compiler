@@ -3,6 +3,9 @@
 
 int resolve_error = 0;
 
+int which_param = 0;
+int which_local = 0;
+
 void scope_enter() {
     struct scope* new = malloc(sizeof(struct scope));
 
@@ -31,6 +34,11 @@ int scope_level() {
 
 void scope_bind(const char* name, struct symbol* s) {
     s->which = scope_stack->which;
+    if (s->kind == SYMBOL_LOCAL) {
+        s->which = which_local++;
+    } else if (s->kind == SYMBOL_PARAM) {
+        s->which = which_param++;
+    }
 
     if (s->type->kind != TYPE_FUNCTION && hash_table_insert(scope_stack->table, name, s) != 1) {
         printf("resolve error: %s is already defined in this scope\n", s->name);
@@ -54,7 +62,7 @@ void scope_bind(const char* name, struct symbol* s) {
         }
     }
 
-    scope_stack->which += 1;
+    // scope_stack->which += 1;
 }
 
 struct symbol* scope_lookup(const char* name) {

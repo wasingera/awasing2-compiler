@@ -9,6 +9,7 @@
 #include "scope.h"
 #include "resolve.h"
 #include "typecheck.h"
+#include "codegen.h"
 
 extern FILE *yyin;
 extern int yylex();
@@ -20,7 +21,6 @@ struct scope* scope_stack = NULL;
 
 extern int resolve_error;
 extern int typecheck_error;
-/* extern struct expr* root; */
 
 typedef enum yytokentype token_t;
 
@@ -31,6 +31,7 @@ char* parse_escape_codes();
 int print(char* fName);
 int resolve(char* fName);
 int typecheck(char* fName);
+int codegen(char* fName, char* fOut);
 
 int main(int argc, char** argv) {
 
@@ -45,6 +46,8 @@ int main(int argc, char** argv) {
             return resolve(argv[i+1]);
         } else if (!strcmp(argv[i], "-typecheck")) {
             return typecheck(argv[i+1]);
+        } else if (!strcmp(argv[i], "-codegen")) {
+            return codegen(argv[i+1], argv[i+2]);
         }
 
     }
@@ -65,6 +68,17 @@ int open_file(char* fName) {
 	}
 
     return 1;
+}
+
+int codegen(char* fName, char* fOut) {
+    if (typecheck(fName) == 1) {
+        return 1;
+    }
+
+    freopen(fOut, "w", stdout);
+    decl_codegen(root, -1);
+
+    return 0;
 }
 
 int typecheck(char* fName) {

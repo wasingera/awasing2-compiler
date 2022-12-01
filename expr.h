@@ -52,7 +52,8 @@ struct expr {
 	const char * string_literal;
 	struct symbol *symbol;
 
-    /* for an expr list */
+    int reg;
+
     struct expr* next;
 };
 

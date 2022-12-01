@@ -1,4 +1,4 @@
-bminor: main.o scanner.o parser.o expr.o stmt.o type.o decl.o param_list.o scope.o hash_table.o symbol.o resolve.o typecheck.o
+bminor: main.o scanner.o parser.o expr.o stmt.o type.o decl.o param_list.o scope.o hash_table.o symbol.o resolve.o typecheck.o codegen.o
 	gcc -o $@ $^ -g
 
 test-typechecker: bminor
@@ -15,6 +15,9 @@ test-scanner: bminor
 
 main.o: main.c tokens.h
 	gcc -c -o $@ main.c -g
+
+codegen.o: codegen.c codegen.h
+	gcc -c -o $@ codegen.c -g
 
 typecheck.o: typecheck.c typecheck.h
 	gcc -c -o $@ typecheck.c

@@ -10,6 +10,9 @@ struct decl * decl_create( char *name, struct type *type, struct expr *value, st
     d->code = code;
     d->next = next;
 
+    d->local_count = 0;
+    d->param_count = 0;
+
     return d;
 }
 

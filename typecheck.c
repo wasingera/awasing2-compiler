@@ -312,7 +312,6 @@ void param_list_typecheck(const char* f_name, struct param_list* params, struct 
 void decl_typecheck(struct decl *d)  {
     if (!d) return;
 
-    // TODO: check array lengths
     if (d->value) {
         struct type* e_t = expr_typecheck(d->value);
         if (!type_equals(d->type, e_t) && d->type->kind != TYPE_AUTO) {

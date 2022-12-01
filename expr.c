@@ -84,7 +84,6 @@ struct expr * expr_create_char_literal( char c ) {
 
 struct expr * expr_create_string_literal( const char *str ) {
     struct expr* e = expr_create(EXPR_STRING_LITERAL, NULL, NULL);
-
     e->string_literal = str;
 
     return e;

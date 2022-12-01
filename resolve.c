@@ -2,6 +2,9 @@
 #include "scope.h"
 #include "symbol.h"
 
+extern int which_param;
+extern int which_local;
+
 void decl_resolve(struct decl* d) {
     if (!d) return;
 
@@ -19,10 +22,14 @@ void decl_resolve(struct decl* d) {
     if (d->code) {
         scope_enter();
         param_list_resolve(d->type->params);
-        scope_enter();
+        // scope_enter();
         stmt_resolve(d->code);
+        // scope_exit();
         scope_exit();
-        scope_exit();
+        d->local_count = which_local;
+        d->param_count = which_param;
+        which_local = 0;
+        which_param = 0;
     } 
 
     decl_resolve(d->next);

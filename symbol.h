@@ -16,6 +16,8 @@ struct symbol {
 	char *name;
     int prototype;
 	int which;
+    int which_param;
+    int which_local;
 };
 
 struct symbol * symbol_create( symbol_t kind, struct type *type, char *name );
