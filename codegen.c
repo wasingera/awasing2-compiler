@@ -99,7 +99,7 @@ void function_epilogue_codegen(struct decl* d) {
     printf("POPQ %%rbp\n");
 
     // return to caller
-    printf("RET\n");
+    printf("RET\n\n");
 }
 
 void stmt_codegen(struct stmt* s, struct decl* func) {
@@ -199,6 +199,7 @@ void print_codegen(struct stmt* s) {
             call = expr_create_func_call(expr_create_name("print_boolean"), expr_create_func_args(curr->left, NULL));
         }
         expr_codegen(call);
+        scratch_free(call->reg);
         curr = curr->middle;
     }
 }
@@ -233,7 +234,10 @@ void expr_codegen(struct expr* e) {
           }
         case EXPR_IDENT:
             e->reg = scratch_alloc();
-            printf("MOVQ %s, %s\n", symbol_codegen(e->symbol), scratch_name(e->reg));
+            if (expr_typecheck(e)->kind == TYPE_ARRAY)
+                printf("LEA %s, %s\n", symbol_codegen(e->symbol), scratch_name(e->reg));
+            else
+                printf("MOVQ %s, %s\n", symbol_codegen(e->symbol), scratch_name(e->reg));
             break;
         case EXPR_ARRAY_SUBSCRIPT:
             array_subscript_codegen(e);
@@ -391,36 +395,43 @@ void assigment_codegen(struct expr* e) {
 
     expr_codegen(e->right);
     if (e->left->kind == EXPR_ARRAY_SUBSCRIPT) {
-        struct expr* name = e->left->left;
-        struct expr* index = e->left->middle;
-        printf("LEA %s, %s\n", symbol_codegen(name->symbol), scratch_name(e->reg));
-        struct expr* offset = expr_create(EXPR_MUL, index->left, expr_create_integer_literal(8));
-        expr_codegen(offset);
-        printf("ADDQ %s, %s\n", scratch_name(offset->reg), scratch_name(e->reg));
-        scratch_free(offset->reg);
+        array_subscript_address_codegen(e->left);
 
-        printf("MOVQ %s, (%s)\n", scratch_name(e->right->reg), scratch_name(e->reg));
+        printf("MOVQ %s, (%s)\n", scratch_name(e->right->reg), scratch_name(e->left->reg));
         printf("MOVQ %s, %s\n", scratch_name(e->right->reg), scratch_name(e->reg));
     } else {
         printf("MOVQ %s, %s\n", scratch_name(e->right->reg), symbol_codegen(e->left->symbol));
         printf("MOVQ %s, %s\n", scratch_name(e->right->reg), scratch_name(e->reg));
     }
+    scratch_free(e->left->reg);
     scratch_free(e->right->reg);
 }
 
-void array_subscript_codegen(struct expr* e) {
+void array_subscript_address_codegen(struct expr* e) {
     struct expr* name = e->left;
-    if (!e->middle) e->middle = expr_create_index_list(expr_create_integer_literal(0), NULL);
     struct expr* index = e->middle;
 
-    e->reg = scratch_alloc();
-    printf("LEA %s, %s\n", symbol_codegen(name->symbol), scratch_name(e->reg));
+    // get array address
+    expr_codegen(name);
 
+    // calculate offset
     struct expr* offset = expr_create(EXPR_MUL, index->left, expr_create_integer_literal(8));
     expr_codegen(offset);
-    printf("ADDQ %s, %s\n", scratch_name(offset->reg), scratch_name(e->reg));
+
+    // add offset to array address
+    printf("ADDQ %s, %s\n", scratch_name(offset->reg), scratch_name(name->reg));
     scratch_free(offset->reg);
 
+    e->reg = name->reg;
+    scratch_free(name->reg);
+
+}
+
+void array_subscript_codegen(struct expr* e) {
+    // calculate address
+    array_subscript_address_codegen(e);
+
+    // load value stored at address
     printf("MOVQ (%s), %s\n", scratch_name(e->reg), scratch_name(e->reg));
 }
 

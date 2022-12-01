@@ -21,6 +21,7 @@ void expr_codegen(struct expr* e);
 void comparison_codegen(struct expr* e, char* type);
 void func_call_codegen(struct expr* e);
 void array_subscript_codegen(struct expr* e);
+void array_subscript_address_codegen(struct expr* e);
 void assigment_codegen(struct expr* e);
 
 char* symbol_codegen(struct symbol* e);
