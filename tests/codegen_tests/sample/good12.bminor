@@ -87,4 +87,5 @@ main: function integer () =
 	{
 		print "should be printed\n";
 	}
+    return 0;
 }

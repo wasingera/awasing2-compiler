@@ -59,6 +59,5 @@ long integer_power( long x, long y )
 }
 
 int string_equals(char* s1, char* s2) {
-    fprintf(stderr, "comparing %s %s\n", s1, s2);
     return !strcmp(s1, s2);
 }

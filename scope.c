@@ -35,9 +35,9 @@ int scope_level() {
 void scope_bind(const char* name, struct symbol* s) {
     s->which = scope_stack->which;
     if (s->kind == SYMBOL_LOCAL) {
-        s->which = which_local++;
+        s->which_local = which_local++;
     } else if (s->kind == SYMBOL_PARAM) {
-        s->which = which_param++;
+        s->which_param = which_param++;
     }
 
     if (s->type->kind != TYPE_FUNCTION && hash_table_insert(scope_stack->table, name, s) != 1) {
@@ -74,9 +74,9 @@ struct symbol* scope_lookup(const char* name) {
             if (s->kind == SYMBOL_GLOBAL) {
                 printf("%s resolves to global %s\n", name, s->name);
             } else if (s->kind == SYMBOL_LOCAL) {
-                printf("%s resolves to local %d\n", name, s->which);
+                printf("%s resolves to local %d\n", name, s->which_local);
             } else if (s->kind == SYMBOL_PARAM) {
-                printf("%s resolves to param %d\n", name, s->which);
+                printf("%s resolves to param %d\n", name, s->which_param);
             }
 
             return s;

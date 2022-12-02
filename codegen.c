@@ -57,6 +57,7 @@ void decl_codegen(struct decl* d, int segment) {
             d->value = expr_create_integer_literal(0);
         expr_codegen(d->value);
         printf("MOVQ %s, %s\n", scratch_name(d->value->reg), symbol_codegen(d->symbol));
+        scratch_free(d->value->reg);
     }
 
     decl_codegen(d->next, segment);
@@ -234,10 +235,10 @@ void expr_codegen(struct expr* e) {
           }
         case EXPR_IDENT:
             e->reg = scratch_alloc();
-            if (e->symbol->kind == SYMBOL_GLOBAL && e->symbol->type->kind == TYPE_ARRAY) {
+            if (e->symbol->kind == SYMBOL_GLOBAL && 
+                    (e->symbol->type->kind == TYPE_ARRAY || e->symbol->type->kind ==TYPE_STRING)) {
                 printf("LEA %s, %s\n", symbol_codegen(e->symbol), scratch_name(e->reg));
-            }
-            else
+            } else
                 printf("MOVQ %s, %s\n", symbol_codegen(e->symbol), scratch_name(e->reg));
             break;
         case EXPR_ARRAY_SUBSCRIPT:

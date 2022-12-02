@@ -2,7 +2,7 @@ bminor: main.o scanner.o parser.o expr.o stmt.o type.o decl.o param_list.o scope
 	gcc -o $@ $^ -g
 
 test-codegen: bminor
-	./tests/codegen_tests/run_tests.sh fibonnacci
+	./tests/codegen_tests/run_tests.sh good11
 
 test-typechecker: bminor
 	./tests/typecheck_tests/run_tests.sh

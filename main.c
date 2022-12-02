@@ -71,6 +71,11 @@ int open_file(char* fName) {
 }
 
 int codegen(char* fName, char* fOut) {
+    if (!fOut) {
+        printf("Need an output file!\n");
+        return 1;
+    }
+
     if (typecheck(fName) == 1) {
         return 1;
     }

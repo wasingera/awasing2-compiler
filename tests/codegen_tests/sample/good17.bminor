@@ -23,4 +23,6 @@ main:function integer () =
 	{
 		print "shouldn't be printed";
 	}
+
+    return 0;
 }

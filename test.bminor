@@ -1,14 +1,11 @@
-s: string = "asdf\n";
-x: integer = 0;
-a: array [5] integer = {1, 2, 3, 4, 5};
+// tests strings/string assignments and printing 
+str:string = "hello";
+main:function integer () =
+{
+    x: integer = 5;
+    print x;
+    y: integer = 6;
+    print x, y;
 
-f: function void(a: array[] integer);
-
-main: function integer () = {
-    f(a);
-    print a[1];
-}
-
-f: function void(a: array[] integer) = {
-    print a[0];
+    return 0;
 }
