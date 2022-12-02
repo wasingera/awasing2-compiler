@@ -28,6 +28,7 @@ void decl_codegen(struct decl* d, int segment) {
                 printf("\n.data\n");
             }
 
+            printf(".global %s\n", d->name);
             switch (d->type->kind) {
                 case TYPE_INTEGER:
                 case TYPE_BOOLEAN:
@@ -37,9 +38,13 @@ void decl_codegen(struct decl* d, int segment) {
                     else
                         printf("%s: .quad 0\n", d->name);
                     break;
-                case TYPE_STRING:
-                    printf("%s: .string \"%s\"\n", d->name, expand_string(d->value->string_literal));
+                case TYPE_STRING: {
+                    int string_label = label_create();
+                    printf("%s: .quad %s\n", d->name, label_name(string_label));
+                    printf("\n%s: .string \"%s\"\n", label_name(string_label), expand_string(d->value->string_literal));
+
                     break;
+                  }
                 case TYPE_ARRAY:
                     printf("%s: ", d->name);
                     if (d->type->subtype->kind == TYPE_STRING) {
@@ -240,8 +245,7 @@ void expr_codegen(struct expr* e) {
           }
         case EXPR_IDENT:
             e->reg = scratch_alloc();
-            if (e->symbol->kind == SYMBOL_GLOBAL && 
-                    (e->symbol->type->kind == TYPE_ARRAY || e->symbol->type->kind ==TYPE_STRING)) {
+            if (e->symbol->kind == SYMBOL_GLOBAL && e->symbol->type->kind == TYPE_ARRAY) {
                 printf("LEA %s, %s\n", symbol_codegen(e->symbol), scratch_name(e->reg));
             } else
                 printf("MOVQ %s, %s\n", symbol_codegen(e->symbol), scratch_name(e->reg));

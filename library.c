@@ -35,6 +35,7 @@ void print_integer( long x )
 
 void print_string( const char *s )
 {
+    // fprintf(stderr, "printing %p\n", s);
 	printf("%s",s);
 }
 
