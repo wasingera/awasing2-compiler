@@ -1,0 +1,8 @@
+main: function integer () = {
+    if (true)
+        print "good";
+    else
+        print "false";
+
+    return 0;
+}

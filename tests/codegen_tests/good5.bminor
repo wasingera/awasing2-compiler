@@ -1,0 +1,11 @@
+p: function void();
+
+main: function integer () = {
+    p();
+
+    return 0;
+}
+
+p: function void() = {
+    print "Prototype\n";
+}

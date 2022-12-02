@@ -44,10 +44,15 @@ void decl_codegen(struct decl* d, int segment) {
                     printf("%s: ", d->name);
                     if (d->type->subtype->kind == TYPE_STRING) {
                         printf(".string "); expr_print(d->value->middle, NULL); printf("\n");
-                    } else if (d->type->subtype->kind == TYPE_ARRAY) {
-
                     } else {
-                        printf(".quad "); expr_print(d->value->middle, NULL); printf("\n");
+                        printf(".quad ");
+                        struct expr* curr = d->value->middle;
+                        while (curr && curr->middle) {
+                            printf("%d, ", curr->left->literal_value);
+                            curr = curr->middle;
+                        }
+                        if (curr) printf("%d", curr->left->literal_value);
+                        printf("\n");
                     }
                     break;
             }
