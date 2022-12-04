@@ -68,7 +68,7 @@ clean:
 	rm ./bminor ./*.o
 	find tests -name "*.out*" -type f -delete
 	find tests -name "*.s*" -type f -delete
-	find tests ! \( -name "run_tests.sh" -o -name "*.bminor" -o -name "*.c" \) -type f -executable -delete
+	find tests ! \( -name "run_test" -o -name "*.bminor" -o -name "*.c" \) -type f -executable -delete
 
 clean-tests:
 	find tests -name "*.out*" -type f -delete

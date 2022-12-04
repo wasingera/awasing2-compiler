@@ -1,0 +1,18 @@
+main: function integer () = {
+    count: integer = 0;
+    i: integer;
+    for (i = 0; count < 20; i++) {
+        if (i % 3 == 0 && i % 5 == 0) {
+            print i, " FizzBuzz\n";
+            count++;
+        } else if (i % 5 == 0) {
+            print i, " Buzz\n";
+            count++;
+        } else if (i % 3 == 0) {
+            print i, " Fizz\n";
+            count++;
+        }
+    }
+
+    return 0;
+}

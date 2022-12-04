@@ -118,10 +118,13 @@ void stmt_codegen(struct stmt* s, struct decl* func) {
 
     switch (s->kind) {
         case STMT_RETURN:
-            expr_codegen(s->expr);
-            printf("MOVQ %s, %%rax\n", scratch_name(s->expr->reg));
+            if (s->expr) {
+                expr_codegen(s->expr);
+                printf("MOVQ %s, %%rax\n", scratch_name(s->expr->reg));
+            }
             printf("JMP .%s_epilogue\n", func->name);
-            scratch_free(s->expr->reg);
+            if (s->expr)
+                scratch_free(s->expr->reg);
             break;
         case STMT_BLOCK:
             stmt_codegen(s->body, func);

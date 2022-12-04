@@ -1,0 +1,4 @@
+main: function integer () = {
+    print (8 ^ (5 * 3 - (4 + 6)));
+    return 0;
+}

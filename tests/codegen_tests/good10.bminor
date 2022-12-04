@@ -1,0 +1,17 @@
+s1: string = "first\n";
+
+main: function integer () = {
+    s2: string = "second\n";
+
+    print s1, s2;
+
+    temp: string = s1;
+    s1 = s2;
+    s2 = temp;
+    temp = "done\n";
+
+    print s1, s2;
+    print temp;
+
+    return 0;
+}
