@@ -1,0 +1,16 @@
+s1: string = " fun and good\n";
+
+f: function void (s: string) = {
+    print "I'm printing ", s, "!\n";
+}
+
+main: function integer () = {
+    s2: string = " money ";
+    print "Big", s2, s1;
+
+    f(s1);
+    f(s2);
+    f("Fun!");
+
+    return 0;
+}

@@ -49,15 +49,22 @@ void decl_codegen(struct decl* d, int segment) {
                     printf("%s: ", d->name);
                     if (d->type->subtype->kind == TYPE_STRING) {
                         printf(".string "); expr_print(d->value->middle, NULL); printf("\n");
-                    } else {
+                    } else if (d->value) {
                         printf(".quad ");
                         struct expr* curr = d->value->middle;
+                        int i = 0;
                         while (curr && curr->middle) {
                             printf("%d, ", curr->left->literal_value);
                             curr = curr->middle;
                         }
                         if (curr) printf("%d", curr->left->literal_value);
                         printf("\n");
+                    } else {
+                        printf(".quad ");
+                        for (int i = 0; i < d->type->expr->literal_value - 1; i++) {
+                            printf("0, ");
+                        }
+                        printf("0");
                     }
                     break;
             }
