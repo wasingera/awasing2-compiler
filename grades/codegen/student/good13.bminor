@@ -1,0 +1,15 @@
+nd: array [6] char = {'h', 'e', 'l', 'l', 'o', '\n'};
+
+print_char_array: function void (a: array [] char) = {
+    i: integer;
+
+    for (i = 0; i < 6; i++) {
+        print a[i];
+    }
+}
+
+main: function integer () = {
+    print_char_array(nd);
+
+    return 0;
+}

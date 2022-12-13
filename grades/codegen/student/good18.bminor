@@ -1,0 +1,15 @@
+f2: function integer (x: integer) = {
+    if (x <= 1) return 1;
+
+    return f2(x-1) * x;
+}
+
+f: function integer () = {
+    return f2(6);
+}
+
+main: function integer () = {
+    print f();
+
+    return 0;
+}

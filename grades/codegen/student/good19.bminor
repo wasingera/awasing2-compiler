@@ -1,0 +1,20 @@
+g: string = "global\n";
+
+f2: function string (s: string) = {
+    print "second\n";
+    return s;
+}
+
+f1: function string (s: string) = {
+    print "first\n";
+    print f2(s);
+
+    return "done";
+}
+
+main: function integer () = {
+    f1("test string\n");
+    f1(g);
+
+    return 0;
+}

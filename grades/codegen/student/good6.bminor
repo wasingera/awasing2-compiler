@@ -1,0 +1,9 @@
+s: string = "asdf";
+f: function void (s: string, s2: string, s3: string) = {
+    print s, ' ', s2, ' ', s3;
+}
+
+main: function integer (argc: integer) = {
+    s2: string = "fda";
+    f(s, s2, "big\n");
+}

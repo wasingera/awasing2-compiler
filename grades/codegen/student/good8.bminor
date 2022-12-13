@@ -1,0 +1,7 @@
+main: function integer () = {
+    s: string = "asdf";
+    if ("asdf" == s)
+        print "good\n";
+
+    return 0;
+}

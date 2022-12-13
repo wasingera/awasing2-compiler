@@ -1,0 +1,8 @@
+main: function integer (argc: integer) = {
+    if (argc > 1)
+        print "args passed\n";
+    else
+        print "no args :(";
+
+    return 0;
+}

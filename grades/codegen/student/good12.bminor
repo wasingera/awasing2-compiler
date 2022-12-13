@@ -1,0 +1,15 @@
+f: function void (x: integer);
+
+main: function integer () = {
+    f(5);
+
+    return 0;
+}
+
+f: function void (x: integer) = {
+    if (x < 0) return;
+
+    print x, '\n';
+
+    f(x-1);
+}

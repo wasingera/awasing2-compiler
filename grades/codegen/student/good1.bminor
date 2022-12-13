@@ -1,0 +1,8 @@
+x: integer = 5;
+
+main: function integer () = {
+    y: integer = 5 ^ 5;
+    print x + y;
+
+    return 0;
+}

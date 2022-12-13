@@ -1,0 +1,8 @@
+a: array [2] char = {'a', 'b'};
+
+main: function integer () = {
+    if (a[0] == 'a')
+        print a[0];
+
+    return 0;
+}

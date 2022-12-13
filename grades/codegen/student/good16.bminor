@@ -1,0 +1,15 @@
+a: array [4] integer = {1, 2, 3, 4};
+i: integer = 1;
+
+main: function integer () = {
+    j: integer;
+    for (j = 0; j < 4; j++) {
+        i = i + 5;
+        a[j] = i; 
+        print a[j], ' ';
+    }
+
+    print '\n';
+
+    return 0;
+}
